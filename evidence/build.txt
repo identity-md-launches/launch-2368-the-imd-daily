@@ -1,0 +1,88 @@
+No files changed, compilation skipped
+
+╭------------------+------------------+-------------------+--------------------+---------------------╮
+| Contract         | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++====================================================================================================+
+| FactoryRehearsal | 927              | 955               | 23,649             | 48,197              |
+|------------------+------------------+-------------------+--------------------+---------------------|
+| IMDDaily         | 9,942            | 10,611            | 14,634             | 38,541              |
+|------------------+------------------+-------------------+--------------------+---------------------|
+| IMDDailyVault    | 1,632            | 1,664             | 22,944             | 47,488              |
+|------------------+------------------+-------------------+--------------------+---------------------|
+| MockIMD          | 4,223            | 4,687             | 20,353             | 44,465              |
+|------------------+------------------+-------------------+--------------------+---------------------|
+| Receiver         | 4,888            | 5,077             | 19,688             | 44,075              |
+╰------------------+------------------+-------------------+--------------------+---------------------╯
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+   ╭▸ src/IMDDailyVault.sol:39:13
+   │
+39 │             token.balanceOf(address(this)) != beforeVault - amount
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+   ╭▸ src/IMDDailyVault.sol:40:20
+   │
+40 │                 || token.balanceOf(PUBLISHER) != beforePublisher + amount
+   │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/IMDDaily.sol:120:13
+    │
+120 │         if (block.timestamp < issue.publishedAt || block.timestamp >= issue.closesAt) revert MintClosed(id);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/IMDDaily.sol:120:52
+    │
+120 │         if (block.timestamp < issue.publishedAt || block.timestamp >= issue.closesAt) revert MintClosed(id);
+    │                                                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/IMDDaily.sol:123:13
+    │
+123 │         if (block.timestamp > deadline) revert DeadlineExpired();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+    ╭▸ src/IMDDaily.sol:135:13
+    │
+135 │             token.balanceOf(address(vault)) != beforeVault + amount || beforePayer < amount
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+    ╭▸ src/IMDDaily.sol:136:20
+    │
+136 │                 || token.balanceOf(msg.sender) != beforePayer - amount
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/IMDDaily.sol:162:16
+    │
+162 │         return block.timestamp >= issue.publishedAt && block.timestamp < issue.closesAt;
+    │                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/IMDDaily.sol:162:56
+    │
+162 │         return block.timestamp >= issue.publishedAt && block.timestamp < issue.closesAt;
+    │                                                        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+

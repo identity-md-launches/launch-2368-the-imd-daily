@@ -1,0 +1,20 @@
+[
+  {
+    "repository": "https://github.com/OpenZeppelin/openzeppelin-contracts",
+    "tag": "v5.4.0",
+    "archive": "https://codeload.github.com/OpenZeppelin/openzeppelin-contracts/tar.gz/refs/tags/v5.4.0",
+    "archive_sha256": "b89829be48bc501051002191733268a93ef6e238a4bb65d8fd1cbdf3969050d1",
+    "vendored_path": "lib/openzeppelin-contracts",
+    "files": 28,
+    "scope": "Unmodified transitive Solidity imports used by src/ and test/, plus LICENSE."
+  },
+  {
+    "repository": "https://github.com/foundry-rs/forge-std",
+    "tag": "v1.9.7",
+    "archive": "https://codeload.github.com/foundry-rs/forge-std/tar.gz/refs/tags/v1.9.7",
+    "archive_sha256": "45157353ab49eab01d294565866731e599b32401757229689ee459aa26b7ee94",
+    "vendored_path": "lib/forge-std",
+    "files": 30,
+    "scope": "Unmodified src/ and both license files."
+  }
+]

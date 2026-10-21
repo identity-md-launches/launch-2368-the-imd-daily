@@ -1,0 +1,107 @@
+Warning: optimizer settings and `viaIR` have been disabled for accurate coverage reports.
+If you encounter "stack too deep" errors, consider using `--ir-minimum` which enables `viaIR` with minimum optimization resolving most of the errors.
+See more: https://book.getfoundry.sh/guides/best-practices/stack-too-deep
+Compiling 55 files with Solc 0.8.26
+Solc 0.8.26 finished in 1.29s
+Compiler run successful!
+Analysing contracts...
+Running tests...
+
+Ran 3 tests for test/Deployment.t.sol:DeploymentTest
+[PASS] test_constructorAcceptsStaticDependencyBeforeCodeExists() (gas: 20702)
+[PASS] test_constructorRejectsInvalidVaultAddresses() (gas: 4352)
+[PASS] test_factoryDeploymentOnEmptyChainNeedsNoExternalContractOrSetup() (gas: 32129155)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 194.90ms (173.52ms CPU time)
+
+Ran 39 tests for test/IMDDaily.t.sol:IMDDailyTest
+[PASS] testFuzz_paymentArithmeticAndRepeatMints(uint256,uint256) (runs: 256, μ: 772046, ~: 772755)
+[PASS] testFuzz_quoteOverflow(uint256) (runs: 256, μ: 15430, ~: 15698)
+[PASS] testFuzz_windowIndependentOfEditorialDate(uint256,uint32) (runs: 256, μ: 602124, ~: 649535)
+[PASS] test_beforeStartIsRejected() (gas: 469356)
+[PASS] test_bubbledReceiverReentrancyRollsBackAll() (gas: 2997417)
+[PASS] test_donationsAndPartialWithdrawalHaveHonestCounters() (gas: 926499)
+[PASS] test_falseReturnPaymentRollsBackEvenAfterTokenMoved() (gas: 641027)
+[PASS] test_initialConfigurationAndZeroSupply() (gas: 196454)
+[PASS] test_insufficientBalanceAndAllowanceRollback() (gas: 778096)
+[PASS] test_invalidPublicationDoesNotConsumeAnID() (gas: 797654)
+[PASS] test_issuesHaveIndependentWindowsAndMetadata() (gas: 1349332)
+[PASS] test_mintEventIsIndexedAndAmountIsExact() (gas: 625196)
+[PASS] test_missingOrMismatchedVaultFailsAtUse() (gas: 1024473)
+[PASS] test_nativeETHRejectedByEveryEntryPoint() (gas: 609898)
+[PASS] test_noMutationUpgradeFreeMintOrReopenSelectors() (gas: 763328)
+[PASS] test_noReturnTokenIsSupportedForPaymentAndWithdrawal() (gas: 803376)
+[PASS] test_noTokenCodeFailsClosed() (gas: 475316)
+[PASS] test_nonexistentIDsRejectedAndAvailabilityFalse() (gas: 190933)
+[PASS] test_paymentFailureModesAreAtomic() (gas: 1295427)
+[PASS] test_paymentTokenCallbackCannotReenterMint() (gas: 877261)
+[PASS] test_publicationCommitsEveryFieldWithoutMinting() (gas: 592473)
+[PASS] test_publisherAlsoPaysFullPriceAndCannotMintExpiredIssues() (gas: 1055327)
+[PASS] test_receiverCannotReenterMintAndObservesSettledState() (gas: 2993249)
+[PASS] test_receiverCannotWithdrawOrPublish() (gas: 3367112)
+[PASS] test_receiverMayTransferItsFullyPaidCopies() (gas: 2692739)
+[PASS] test_receiverRejectionRollsBackPaymentAllowanceSupplyAndCounters() (gas: 2944449)
+[PASS] test_rejectedMintAlsoRollsBackPublisherWithdrawalInCallback() (gas: 2894628)
+[PASS] test_repeatedMultiCopyMintsAndGift() (gas: 943930)
+[PASS] test_transfersAndBatchTransfersAfterExpiryPreserveSupply() (gas: 1465929)
+[PASS] test_unauthorizedPublicationAndWithdrawal() (gas: 710877)
+[PASS] test_vaultHasNoAlternativeRecipientOrAuthoritySetter() (gas: 171459)
+[PASS] test_windowStartsAtPublicationAndClosesExactly() (gas: 851649)
+[PASS] test_withdrawalFailureModesRollbackCountersAndBalances() (gas: 1449401)
+[PASS] test_withdrawalTokenCallbackCannotReenter() (gas: 892624)
+[PASS] test_wrongDecimalsFailBeforeTakingPayment() (gas: 530502)
+[PASS] test_wrongReceiverSelectorAndNonReceiverRevert() (gas: 2852533)
+[PASS] test_zeroAndExcessWithdrawalRevert() (gas: 77707)
+[PASS] test_zeroQuantityZeroRecipientOverflowAndDeadline() (gas: 763367)
+[PASS] test_zeroQuoteRejected() (gas: 9138)
+Suite result: ok. 39 passed; 0 failed; 0 skipped; finished in 195.50ms (237.09ms CPU time)
+
+Ran 1 test for test/DailyInvariant.t.sol:DailyInvariantTest
+[PASS]
+DailyInvariantTest invariants:
+[PASS] invariant_conservationOfPaymentsDonationsAndWithdrawals
+[PASS] invariant_supplyOwnershipExpiryAndContentArePermanent
+ DailyInvariantTest invariants (runs: 128, calls: 6144, reverts: 0)
+
+╭--------------+----------------+-------+---------+----------╮
+| Contract     | Selector       | Calls | Reverts | Discards |
++============================================================+
+| DailyHandler | advance        | 838   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | buy            | 857   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | donate         | 908   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | publish        | 922   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | transferCopies | 869   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | tryExpiredMint | 866   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | withdraw       | 884   | 0       | 0        |
+╰--------------+----------------+-------+---------+----------╯
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 9.66s (9.65s CPU time)
+
+Ran 3 test suites in 9.66s (10.05s CPU time): 43 tests passed, 0 failed, 0 skipped (43 total tests)
+
+╭---------------------------+------------------+------------------+-----------------+-----------------╮
+| File                      | % Lines          | % Statements     | % Branches      | % Funcs         |
++=====================================================================================================+
+| src/DailyAuthority.sol    | 100.00% (4/4)    | 100.00% (3/3)    | 100.00% (1/1)   | 100.00% (2/2)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| src/IMDDaily.sol          | 100.00% (54/54)  | 98.94% (93/94)   | 100.00% (12/12) | 100.00% (10/10) |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| src/IMDDailyVault.sol     | 100.00% (15/15)  | 95.65% (22/23)   | 100.00% (3/3)   | 100.00% (2/2)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| test/DailyInvariant.t.sol | 100.00% (59/59)  | 100.00% (73/73)  | 100.00% (5/5)   | 100.00% (8/8)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| test/Deployment.t.sol     | 83.33% (5/6)     | 75.00% (3/4)     | 0.00% (0/2)     | 100.00% (2/2)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| test/IMDDailyFork.t.sol   | 0.00% (0/8)      | 0.00% (0/6)      | 0.00% (0/2)     | 0.00% (0/1)     |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| test/helpers/MockIMD.sol  | 100.00% (34/34)  | 100.00% (35/35)  | 100.00% (10/10) | 100.00% (9/9)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| test/helpers/Receiver.sol | 100.00% (28/28)  | 100.00% (32/32)  | 88.89% (8/9)    | 100.00% (4/4)   |
+|---------------------------+------------------+------------------+-----------------+-----------------|
+| Total                     | 95.67% (199/208) | 96.67% (261/270) | 88.64% (39/44)  | 97.37% (37/38)  |
+╰---------------------------+------------------+------------------+-----------------+-----------------╯

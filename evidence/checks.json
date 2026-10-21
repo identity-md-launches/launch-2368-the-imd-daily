@@ -1,0 +1,201 @@
+{
+  "fuzz_seed": "0x354f27bfc473c2676f533ebe69e5382260d1329e4a45ec587dafe391a300dc83",
+  "checks": [
+    {
+      "check": "build",
+      "command": [
+        "forge",
+        "build",
+        "--sizes"
+      ],
+      "exit_code": 0,
+      "output": "evidence/build.txt"
+    },
+    {
+      "check": "local_tests",
+      "command": [
+        "forge",
+        "test"
+      ],
+      "exit_code": 0,
+      "output": "evidence/local-tests.txt"
+    },
+    {
+      "check": "fork_rpc_unavailable",
+      "command": [
+        "forge",
+        "test",
+        "--match-contract",
+        "IMDDailyForkTest",
+        "--fork-url",
+        "https://ethereum-rpc.publicnode.com",
+        "--fork-block-number",
+        "26239078"
+      ],
+      "exit_code": 1,
+      "output": null,
+      "reason": "Public RPC returned -32000 historical state is not available. Same pinned block was retried through another endpoint."
+    },
+    {
+      "check": "fork_tests",
+      "command": [
+        "forge",
+        "test",
+        "--match-contract",
+        "IMDDailyForkTest",
+        "--fork-url",
+        "https://eth.drpc.org",
+        "--fork-block-number",
+        "26239078"
+      ],
+      "exit_code": 0,
+      "output": "evidence/fork-tests.txt"
+    },
+    {
+      "check": "coverage",
+      "command": [
+        "forge",
+        "coverage",
+        "--no-match-contract",
+        "IMDDailyForkTest",
+        "--report",
+        "summary"
+      ],
+      "exit_code": 0,
+      "output": "evidence/coverage.txt"
+    },
+    {
+      "check": "final_build",
+      "command": [
+        "forge",
+        "build",
+        "--sizes"
+      ],
+      "exit_code": 0,
+      "output": "evidence/build.txt"
+    },
+    {
+      "check": "final_format",
+      "command": [
+        "forge",
+        "fmt",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": null
+    },
+    {
+      "check": "abi_export",
+      "command": [
+        "python3",
+        "scripts/export_artifacts.py"
+      ],
+      "exit_code": 0,
+      "output": null
+    },
+    {
+      "check": "final_local_tests",
+      "command": [
+        "forge",
+        "test"
+      ],
+      "exit_code": 0,
+      "output": "evidence/local-tests.txt"
+    },
+    {
+      "check": "final_fork_tests",
+      "command": [
+        "forge",
+        "test",
+        "--match-contract",
+        "IMDDailyForkTest",
+        "--fork-url",
+        "https://eth.drpc.org",
+        "--fork-block-number",
+        "26239078"
+      ],
+      "exit_code": 0,
+      "output": "evidence/fork-tests.txt"
+    },
+    {
+      "check": "final_format",
+      "command": [
+        "forge",
+        "fmt",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": null
+    },
+    {
+      "check": "clean_rebuild_prepare",
+      "command": [
+        "forge",
+        "clean"
+      ],
+      "exit_code": 0,
+      "output": null
+    },
+    {
+      "check": "clean_build",
+      "command": [
+        "forge",
+        "build",
+        "--sizes"
+      ],
+      "exit_code": 0,
+      "output": "evidence/build.txt"
+    },
+    {
+      "check": "clean_local_tests",
+      "command": [
+        "forge",
+        "test"
+      ],
+      "exit_code": 0,
+      "output": "evidence/local-tests.txt"
+    },
+    {
+      "check": "final_coverage",
+      "command": [
+        "forge",
+        "coverage",
+        "--no-match-contract",
+        "IMDDailyForkTest",
+        "--report",
+        "summary"
+      ],
+      "exit_code": 0,
+      "output": "evidence/coverage.txt"
+    },
+    {
+      "check": "final_build",
+      "command": [
+        "forge",
+        "build",
+        "--sizes"
+      ],
+      "exit_code": 0,
+      "output": "evidence/build.txt"
+    },
+    {
+      "check": "final_abi_export",
+      "command": [
+        "python3",
+        "scripts/export_artifacts.py"
+      ],
+      "exit_code": 0,
+      "output": null
+    },
+    {
+      "check": "final_format",
+      "command": [
+        "forge",
+        "fmt",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": null
+    }
+  ]
+}

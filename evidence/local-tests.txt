@@ -1,0 +1,82 @@
+No files changed, compilation skipped
+
+Ran 1 test for test/IMDDailyFork.t.sol:IMDDailyForkTest
+[SKIP: skipped] setUp() (gas: 0)
+Suite result: ok. 0 passed; 0 failed; 1 skipped; finished in 1.16ms (0.00ns CPU time)
+
+Ran 3 tests for test/Deployment.t.sol:DeploymentTest
+[PASS] test_constructorAcceptsStaticDependencyBeforeCodeExists() (gas: 17974)
+[PASS] test_constructorRejectsInvalidVaultAddresses() (gas: 3806)
+[PASS] test_factoryDeploymentOnEmptyChainNeedsNoExternalContractOrSetup() (gas: 17435464)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 45.23ms (44.88ms CPU time)
+
+Ran 39 tests for test/IMDDaily.t.sol:IMDDailyTest
+[PASS] testFuzz_paymentArithmeticAndRepeatMints(uint256,uint256) (runs: 256, μ: 741972, ~: 742329)
+[PASS] testFuzz_quoteOverflow(uint256) (runs: 256, μ: 13023, ~: 13134)
+[PASS] testFuzz_windowIndependentOfEditorialDate(uint256,uint32) (runs: 256, μ: 586095, ~: 633150)
+[PASS] test_beforeStartIsRejected() (gas: 460584)
+[PASS] test_bubbledReceiverReentrancyRollsBackAll() (gas: 2167796)
+[PASS] test_donationsAndPartialWithdrawalHaveHonestCounters() (gas: 887904)
+[PASS] test_falseReturnPaymentRollsBackEvenAfterTokenMoved() (gas: 624381)
+[PASS] test_initialConfigurationAndZeroSupply() (gas: 184434)
+[PASS] test_insufficientBalanceAndAllowanceRollback() (gas: 751303)
+[PASS] test_invalidPublicationDoesNotConsumeAnID() (gas: 770206)
+[PASS] test_issuesHaveIndependentWindowsAndMetadata() (gas: 1305311)
+[PASS] test_mintEventIsIndexedAndAmountIsExact() (gas: 605270)
+[PASS] test_missingOrMismatchedVaultFailsAtUse() (gas: 1000651)
+[PASS] test_nativeETHRejectedByEveryEntryPoint() (gas: 596746)
+[PASS] test_noMutationUpgradeFreeMintOrReopenSelectors() (gas: 739816)
+[PASS] test_noReturnTokenIsSupportedForPaymentAndWithdrawal() (gas: 780136)
+[PASS] test_noTokenCodeFailsClosed() (gas: 466400)
+[PASS] test_nonexistentIDsRejectedAndAvailabilityFalse() (gas: 174016)
+[PASS] test_paymentFailureModesAreAtomic() (gas: 1245999)
+[PASS] test_paymentTokenCallbackCannotReenterMint() (gas: 857141)
+[PASS] test_publicationCommitsEveryFieldWithoutMinting() (gas: 570016)
+[PASS] test_publisherAlsoPaysFullPriceAndCannotMintExpiredIssues() (gas: 982997)
+[PASS] test_receiverCannotReenterMintAndObservesSettledState() (gas: 2161480)
+[PASS] test_receiverCannotWithdrawOrPublish() (gas: 2572370)
+[PASS] test_receiverMayTransferItsFullyPaidCopies() (gas: 1912170)
+[PASS] test_receiverRejectionRollsBackPaymentAllowanceSupplyAndCounters() (gas: 2154848)
+[PASS] test_rejectedMintAlsoRollsBackPublisherWithdrawalInCallback() (gas: 2107961)
+[PASS] test_repeatedMultiCopyMintsAndGift() (gas: 905222)
+[PASS] test_transfersAndBatchTransfersAfterExpiryPreserveSupply() (gas: 1417490)
+[PASS] test_unauthorizedPublicationAndWithdrawal() (gas: 691312)
+[PASS] test_vaultHasNoAlternativeRecipientOrAuthoritySetter() (gas: 166225)
+[PASS] test_windowStartsAtPublicationAndClosesExactly() (gas: 822795)
+[PASS] test_withdrawalFailureModesRollbackCountersAndBalances() (gas: 1401328)
+[PASS] test_withdrawalTokenCallbackCannotReenter() (gas: 868876)
+[PASS] test_wrongDecimalsFailBeforeTakingPayment() (gas: 520491)
+[PASS] test_wrongReceiverSelectorAndNonReceiverRevert() (gas: 2067658)
+[PASS] test_zeroAndExcessWithdrawalRevert() (gas: 74523)
+[PASS] test_zeroQuantityZeroRecipientOverflowAndDeadline() (gas: 741927)
+[PASS] test_zeroQuoteRejected() (gas: 8476)
+Suite result: ok. 39 passed; 0 failed; 0 skipped; finished in 82.22ms (102.27ms CPU time)
+
+Ran 1 test for test/DailyInvariant.t.sol:DailyInvariantTest
+[PASS]
+DailyInvariantTest invariants:
+[PASS] invariant_conservationOfPaymentsDonationsAndWithdrawals
+[PASS] invariant_supplyOwnershipExpiryAndContentArePermanent
+ DailyInvariantTest invariants (runs: 128, calls: 6144, reverts: 0)
+
+╭--------------+----------------+-------+---------+----------╮
+| Contract     | Selector       | Calls | Reverts | Discards |
++============================================================+
+| DailyHandler | advance        | 838   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | buy            | 857   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | donate         | 908   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | publish        | 922   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | transferCopies | 869   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | tryExpiredMint | 866   | 0       | 0        |
+|--------------+----------------+-------+---------+----------|
+| DailyHandler | withdraw       | 884   | 0       | 0        |
+╰--------------+----------------+-------+---------+----------╯
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 4.02s (4.02s CPU time)
+
+Ran 4 test suites in 4.03s (4.15s CPU time): 43 tests passed, 0 failed, 1 skipped (44 total tests)

@@ -1,0 +1,26 @@
+{
+  "project": "The IMD Daily",
+  "chain_id": 1,
+  "status": "awaiting_network_release",
+  "mainnet_deployed": false,
+  "github_published": false,
+  "etherscan_verified": false,
+  "source_commit": null,
+  "github_url": null,
+  "deployments": [],
+  "receipts": [],
+  "verified_source_links": [],
+  "publisher": "0x48E4E74fE1d0c14404cEB57B9fec5b21329C6ec9",
+  "payment_token": "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+  "payment_decimals": 18,
+  "price_base_units": "100000000000000000",
+  "pending_steps": [
+    "Publish the accepted source and record its actual final commit SHA and GitHub URL",
+    "Generate the supported launch manifest with vault before collection",
+    "Complete the separate independent contributor security review",
+    "Execute and confirm the network factory deployment on Ethereum mainnet",
+    "Verify both contracts on Etherscan and attach real addresses, receipts, and links"
+  ],
+  "note": "All application transactions in this assignment were local tests or fork simulations. No mainnet issue was published."
+}
+
