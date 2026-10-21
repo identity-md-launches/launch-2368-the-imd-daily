@@ -1,0 +1,16 @@
+{
+  "kind": "evm_contracts",
+  "contracts": [
+    {
+      "contract": "IMDDailyVault",
+      "constructorArgs": []
+    },
+    {
+      "contract": "IMDDaily",
+      "constructorArgs": [
+        "$contract:IMDDailyVault"
+      ]
+    }
+  ],
+  "notes": "The IMD Daily (symbol IMDDAILY): non-upgradeable ERC1155 open-edition newspaper collectibles on Ethereum mainnet (chain id 1), contracts only. No new ERC20, pool, liquidity, royalties, proxy, initializer or post-deployment setup. Both contracts inherit DailyAuthority, which hardcodes the publisher 0x48E4E74fE1d0c14404cEB57B9fec5b21329C6ec9 as the sole authority (owner() returns it; there is no ownership transfer) and the existing Ethereum IMD token 0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7 (18 decimals, re-checked onchain at every mint) as the only payment token. Neither the factory (msg.sender) nor the launch wallet (tx.origin) receives any role, so no owner argument exists. Deployment order: 1) IMDDailyVault, constructor(), no arguments. It receives all IMD mint proceeds and only the publisher may withdraw, always to the publisher wallet, in any positive partial amount up to the actual balance; it exposes balance() and totalWithdrawn and emits Withdrawal events. 2) IMDDaily, constructor(address vault_) filled by $contract:IMDDailyVault, the vault deployed in step 1. The constructor stores the address as an immutable and rejects zero, publisher and token addresses; it makes no external call, so empty-chain construction succeeds, and the vault's PUBLISHER/PAYMENT_TOKEN getters plus IMD decimals are verified at mint. Only the publisher can createIssue, which assigns the next sequential token id, records title, editorial date, PDF URL, cover URL, metadata URI and SHA-256 hashes immutably, and opens a mint window from the publication block.timestamp to exactly 86400 seconds later (mint requires publishedAt <= block.timestamp < closesAt). Price is the constant 0.1 IMD (100000000000000000 base units) per copy, uncapped supply and uncapped per-wallet quantity inside the window, no free or owner mint, no reopening, extension, URI or hash changes. mint(id, quantity, recipient, deadline) pulls quantity*PRICE via SafeERC20 straight into the vault with exact-balance checks, counts totalCollected for paid mints only (donations are never counted), then safe-mints under ReentrancyGuard so a reverting payment or receiver callback rolls back everything. All functions are nonpayable; ETH is gas only. Views: getIssue, issueStatus (supply, publishedAt, closesAt, price, available), isAvailable, issueExists, issueCount, totalSupply(id), quote; events IssuePublished, CopiesMinted and URI support paginated indexing. Zero issues and zero copies exist at deployment; the publisher publishes real issues later through the separate website job. Solidity 0.8.26, Cancun, optimizer 200 runs, bytecode_hash none; OpenZeppelin v5.4.0 subset vendored as ordinary files in lib/. Runtime sizes are within EIP-170 and initcode within EIP-3860; test/Deployment.t.sol rehearses this exact two-step CREATE2 order in a single factory call. Integration guide, metadata schema and ABIs are in docs/ and abi/."
+}
