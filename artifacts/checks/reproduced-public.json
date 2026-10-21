@@ -1,0 +1,68 @@
+[
+  {
+    "test": "reader",
+    "browser": "chromium",
+    "width": 390,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": -171,
+      "width": 732,
+      "viewport": 390
+    },
+    "nav": [
+      "1",
+      "1",
+      "1"
+    ],
+    "scrolling": {
+      "top": 1059,
+      "page": 2217
+    }
+  },
+  {
+    "test": "reader",
+    "browser": "chromium",
+    "width": 1440,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": -280,
+      "width": 2000,
+      "viewport": 1440
+    },
+    "nav": [
+      "1",
+      "1",
+      "1"
+    ],
+    "scrolling": {
+      "top": 2853,
+      "page": 5709
+    }
+  },
+  {
+    "test": "vault",
+    "browser": "chromium",
+    "width": 320,
+    "scroll": 457,
+    "client": 320,
+    "table": 437
+  },
+  {
+    "test": "vault",
+    "browser": "chromium",
+    "width": 390,
+    "scroll": 457,
+    "client": 390,
+    "table": 437
+  },
+  {
+    "test": "outage",
+    "route": "issue",
+    "text": "Skip to content\nWednesday, October 21, 2026\nConnect\nThe IMD Daily\nNo edition published yet\nEthereum edition\nToday\nArchive\nMy Collection\nVault\nAbout\nNo issue 1 on chain\n\nThe contract has 0 published issues. Open the archive\n\nThe IMD Daily · ERC-1155 on Ethereum\nPublisher desk"
+  },
+  {
+    "test": "outage",
+    "route": "read",
+    "text": "No issue 1 on chain. Open the archive"
+  }
+]

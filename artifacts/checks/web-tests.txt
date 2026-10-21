@@ -1,0 +1,14 @@
+
+> the-imd-daily-web@1.0.0 test
+> vitest run --configLoader native
+
+
+ RUN  v3.2.7 /tmp/imd-revision/repo/web
+
+ ✓ test/logic.test.ts (12 tests) 12ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  11:12:57
+   Duration  708ms (transform 136ms, setup 0ms, collect 397ms, tests 12ms, environment 0ms, prepare 96ms)
+

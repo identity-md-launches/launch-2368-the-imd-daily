@@ -1,0 +1,4 @@
+
+> the-imd-daily-web@1.0.0 typecheck
+> tsc --noEmit
+

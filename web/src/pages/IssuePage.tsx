@@ -6,8 +6,9 @@ import { Stale } from "../components/Stale";
 
 /** Permalink for one issue: #/issue/<id>. */
 export function IssuePage({ id }: { id: string }) {
-  const { status, issues, summaries, publications } = useData();
+  const { status, issues, summaries, publications, reload } = useData();
   if (status === "loading") return <p className="status-line" role="status">Reading issue {id} from Ethereum…</p>;
+  if (status === "error") return <p className="status-line" role="alert">The edition could not be checked. Try again. <button className="link" onClick={reload}>Retry</button></p>;
   const issue = /^\d+$/.test(id) ? issues.find((i) => i.id === BigInt(id)) : undefined;
   if (!issue)
     return (

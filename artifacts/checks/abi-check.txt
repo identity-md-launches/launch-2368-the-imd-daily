@@ -1,0 +1,6 @@
+
+> the-imd-daily-web@1.0.0 check:abi
+> node scripts/check-abi.mjs
+
+ok   IMDDaily cb9d868d94243c297f852a84b9bbfeb186c26816a9fb3e8307663b8e0585f115
+ok   IMDDailyVault fed625e52c66a96d8d09b4163e810a3d8a5972047fc05df90cf16b6772653b8a

@@ -48,8 +48,10 @@ Square corners everywhere (`border-radius: 0`). Dashed border only for the not-y
 - `.btn` / `.btn-primary` / `.btn-quiet` (styles.css): 44px minimum height; primary is burgundy. Rest, hover, active, disabled and `:focus-visible` (2px ink ring, 2px offset) states.
 - `ConnectSheet` (`web/src/wallet/ConnectSheet.tsx`): one Connect control; EIP-6963 wallets, Coinbase Wallet; on phones "Open in" rows; 48px rows; closes by ×, backdrop or Escape, focus returns to the opener. Wrong network shows "Switch to Ethereum".
 - `MintPanel` (`web/src/components/MintPanel.tsx`): status line (Open + countdown / Closed), quantity, IMD total, gas in ETH, exact approval then mint, live status region with Etherscan links.
-- `Reader` (`web/src/components/Reader.tsx`): dark toolbar (close, page field, prev/next, zoom, fit, full screen, download) over vertically stacked lazily rendered pages.
-- `.record` definition list for hashes and contract facts; `.figures` table for vault accounting; `Stale` status line.
+- `Reader` (`web/src/components/Reader.tsx`): dark toolbar (close, page field, prev/next, zoom, fit, full screen, download) over vertically stacked lazily rendered pages. `.reader-pages` aligns pages at the scroll origin; `.pdf-page` uses auto inline margins to center only while it fits. Zoomed pages keep both edges reachable within the reader. Navigation updates the page field directly; vertical scrolling tracks the nearest page top, independently of how much of a large page fits on screen. Explicit navigation remains selected when a short final page cannot align at the top.
+- `.record` definition list for hashes and contract facts; `.figures` two-column table for reader-facing vault labels and IMD amounts. Cells and the full publisher-address link can wrap on narrow screens. `Stale` status line.
+- `IssuePage` / `ReadPage`: failed initial chain reads show an announced error and Retry action before inferring that an issue is absent. The reader route keeps the dark surface.
+- `Publisher` (`web/src/pages/Publisher.tsx`): numbered desk sections, existing `.setup` note for recoverable publication/summary status, and `.publish-box` confirmation with the exact prepared title, UTC date, summary, URLs and PDF hash. Edits invalidate preparation and confirmation. In-flight preparation/publication locks the fields; a saved publication blocks another preparation until its summary is finalized. Status uses words alongside the existing ink, green and error tokens.
 
 ## Do's and don'ts
 

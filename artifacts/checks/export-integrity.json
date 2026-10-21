@@ -1,0 +1,34 @@
+{
+  "sourceHeadBeforeRevision": "a5bf9db5921da5c24110791489b3326ca3116de5",
+  "sourceHashes": {
+    "web/src/components/Reader.tsx": "210d31b204a832714a3d14b858f7b7a8b954f83b662f8e0ee89012aac5632cdc",
+    "web/src/pages/VaultPage.tsx": "4310b7751abbbba43b195833e3b86c857e2281d98d603d440af707c2d29ab0ad",
+    "web/src/pages/IssuePage.tsx": "e6431668ff33a9135327038a1738c2c718149e0d03f35e35c442a25737290561",
+    "web/src/pages/ReadPage.tsx": "ca028593e19c2ccf693c524698af06e2b3d44ebf29e189135735fc5dde4ce68a",
+    "web/src/pages/Publisher.tsx": "4478a7914ba625c4e4094071d6f9e14a969e208987cca7bdc3c7e4e666af6d11",
+    "web/src/styles.css": "10de5de49fa5191589d4f490252fc66990e143dab6e7d340ddee89a59bbd288a",
+    "server/Caddyfile": "be8db34055fd83bfcbaf0848e97c152908aabeba24c2b726b1b590dfad654243",
+    "server/restore.sh": "2eee2faa97ad6f22e69f6247b6ac6d8f71ffda61c08bd792dace952f59a268a2"
+  },
+  "exportHashes": {
+    "favicon.svg": "13aa3d18188a4c07ba1bb666a02a687d899442cf970338c11343e3236f25caef",
+    "service.json": "c049bd74b66f1c3d671f7272a1befed487c86e513babd993682ba70879e3b7fd",
+    "index.html": "e66e3358ade12ade1f34eb04548d1b31057ae632a1cb7949027988fbba7ba64c",
+    "og.png": "02d14acafcdf97631c9c12e1da6df1a230163cbb921cfed80f2c27c2cd14ec72",
+    "assets/source-serif-4-latin-400-normal-DJ5YJwmz.woff2": "02194deb92d3975dd30e11a3824a1f1db32b48c93654e60560cb81ce8e7b5f95",
+    "assets/playfair-display-latin-900-normal-oSb7_CWx.woff2": "2772c56b28bec10f310634732b0554dd6cced8ad0f723bbdf73f6abc53829ad0",
+    "assets/index-CGZNVqtS.js": "5140b0ac6f128767714c40f387be67ae6a05773306ca417b6d76894e711a28b9",
+    "assets/playfair-display-latin-900-normal-DypQvTWf.woff": "edf03b449abed72765d03468112a7e4f742fa407ee058226b21acf9d2c588f60",
+    "assets/source-serif-4-latin-600-normal-DeJomR3S.woff": "cf44d31e38a498c19087148703da185058bd9ae1ab09e05d6327507479e2eb88",
+    "assets/pdf.worker.min-yatZIOMy.mjs": "1baa1844c89c80a5b2797c916e75ab29254be46d8e9cb53cb6364d7aad84be36",
+    "assets/source-serif-4-latin-400-normal-C1O10bxN.woff": "d9e83df242381ae1ecab8238bb865a25b1e9ebe01fe1505a032f12cda6154857",
+    "assets/ccip-DmOfX8rC.js": "19d1f4f2512cca9d65258ddceabff45e1aaed1371c444660e860d0957d76d0e8",
+    "assets/index-BanSrxaK.js": "f2dfc3bbee218c384f53a58223376109d6db7fc370e0372a228edc3d1e01c3ef",
+    "assets/index-CrBNqaYO.css": "ab3028f3e63cb909895167128051bc392936513393bb5d8bcd1c7f68ca5af123",
+    "assets/index-BHzUuMrw.js": "557d65d503e667d273a0ed8db3828529431fa5624aed8a0425497af619f7e059",
+    "assets/hooks.module-DE9oX6xH.js": "18290b66f5736ddfcd375526f88fd55c2ecf072d6feee11d3554a78df4a3594f",
+    "assets/source-serif-4-latin-600-normal-DouSKlru.woff2": "f2b7e1cf1d277b7608231868135648f8ad8e2b58d8e97ca088bee15dc357bee7"
+  },
+  "exportMatchesTestedBuild": true,
+  "exportBytes": 3320938
+}

@@ -3,3 +3,41 @@ cache/
 broadcast/
 test/scratch/
 
+# Explicit revision-delivery path budget (only the exact paths below):
+# /.imd-responses.json: 16 KiB; /artifacts/validation.md: 32 KiB;
+# listed /artifacts/checks files combined: 128 KiB;
+# listed /artifacts/browser screenshots combined: 1 MiB.
+!/.imd-responses.json
+!/artifacts/
+/artifacts/*
+!/artifacts/validation.md
+!/artifacts/checks/
+/artifacts/checks/*
+!/artifacts/browser/
+/artifacts/browser/*
+!/artifacts/browser/1440.png
+!/artifacts/browser/390.png
+!/artifacts/browser/chromium-reader-1440.png
+!/artifacts/browser/chromium-reader-390.png
+!/artifacts/browser/chromium-vault-320.png
+!/artifacts/browser/chromium-vault-390.png
+!/artifacts/browser/front-empty-390.png
+!/artifacts/browser/large-raster-reader.png
+!/artifacts/browser/publisher-confirmation.png
+!/artifacts/browser/publisher-recovery-failure.png
+!/artifacts/browser/reader-keyboard-focus.png
+!/artifacts/checks/abi-check.txt
+!/artifacts/checks/browser-results.json
+!/artifacts/checks/build.txt
+!/artifacts/checks/caddy-before.txt
+!/artifacts/checks/caddy-validate.txt
+!/artifacts/checks/export-integrity.json
+!/artifacts/checks/reproduced-public.json
+!/artifacts/checks/reproduced-publisher.txt
+!/artifacts/checks/restore-before.txt
+!/artifacts/checks/restore-busybox.txt
+!/artifacts/checks/server-tests.txt
+!/artifacts/checks/submission-budget.json
+!/artifacts/checks/taste.json
+!/artifacts/checks/typecheck.txt
+!/artifacts/checks/web-tests.txt

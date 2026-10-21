@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAccount, useSignMessage, useWalletClient } from "wagmi";
 import { decodeEventLog, type Hex } from "viem";
 import { CHAIN_ID, DAILY, PUBLISHER, SERVICE_STORAGE_KEY, dailyAbi, txUrl } from "../config";
@@ -20,7 +20,7 @@ type Content = {
   title: string; editorialDate: bigint; pdfURL: string; coverURL: string; metadataURI: string;
   pdfHash: Hex; coverHash: Hex; metadataHash: Hex;
 };
-type Pending = { predictedId: string; content: Record<keyof Content, string>; hash?: Hex; startedAt: number };
+type Pending = { predictedId: string; content: Record<keyof Content, string>; hash?: Hex; startedAt: number; serviceOrigin?: string; publishedIssueId?: string };
 type Prepared = { content: Content; predictedId: bigint; summary: string };
 
 const toStored = (c: Content) => Object.fromEntries(Object.entries(c).map(([k, v]) => [k, String(v)])) as Pending["content"];
@@ -34,6 +34,13 @@ export function Publisher() {
   const [health, setHealth] = useState<"unknown" | "ok" | "down">("unknown");
   const service = useMemo(() => (origin ? new Service(origin) : null), [origin]);
   const [signedIn, setSignedIn] = useState(false);
+  const [pending, setPending] = useState<Pending | null>(readPending);
+  const [publishing, setPublishing] = useState(false);
+  const updatePending = useCallback((record: Pending | null) => {
+    if (record) localStorage.setItem(PENDING_KEY, JSON.stringify(record));
+    else localStorage.removeItem(PENDING_KEY);
+    setPending(record);
+  }, []);
   const [authMsg, setAuthMsg] = useState("");
   const { signMessageAsync } = useSignMessage();
 
@@ -59,7 +66,8 @@ export function Publisher() {
     <section className="desk" aria-labelledby="desk-h">
       <h2 id="desk-h" className="h-section">Publisher desk</h2>
       <p className="fine">Only the publisher wallet {PUBLISHER} can upload or publish. Readers never need this page.</p>
-      <PendingRecovery />
+      <PendingRecovery pending={pending} service={signedIn && isPublisher && chainId === CHAIN_ID ? service : null}
+        enabled={!publishing} onPending={updatePending} />
 
       <h3 className="h-sub">1. Upload service</h3>
       {origin === undefined && <p role="status">Looking for the upload service…</p>}
@@ -88,44 +96,84 @@ export function Publisher() {
       {signedIn && <p className="ok">Signed in as the publisher for this session.</p>}
       {authMsg && <p role="status" className="note">{authMsg}</p>}
 
-      {signedIn && service && <Compose service={service} />}
+      {signedIn && isPublisher && chainId === CHAIN_ID && service && <Compose service={service} blocked={!!pending}
+        onPending={updatePending} onPublishing={setPublishing} />}
     </section>
   );
 }
 
-function PendingRecovery() {
-  const { issues, reload } = useData();
-  const [pending, setPending] = useState<Pending | null>(readPending);
+function PendingRecovery({ pending, service, enabled, onPending }: {
+  pending: Pending | null; service: Service | null; enabled: boolean; onPending: (record: Pending | null) => void;
+}) {
+  const { issues, publications, reload } = useData();
   const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [retry, setRetry] = useState(0);
   useEffect(() => {
-    if (!pending) return;
+    if (!pending || pending.publishedIssueId || !enabled) return;
     let off = false;
     (async () => {
       const onChain = issues.find((i) => i.pdfHash.toLowerCase() === pending.content.pdfHash.toLowerCase());
-      if (onChain) { setMsg(`Published as No. ${onChain.id}.`); localStorage.removeItem(PENDING_KEY); reload(); return; }
+      if (onChain) {
+        const hash = pending.hash ?? publications[onChain.id.toString()]?.txHash;
+        if (!hash) { setMsg(`Published as No. ${onChain.id}. Waiting for its publication transaction to be indexed…`); return; }
+        onPending({ ...pending, hash, publishedIssueId: onChain.id.toString() });
+        return;
+      }
       if (!pending.hash) { setMsg("A publication was started but no transaction hash was recorded. Check your wallet's activity before publishing again; the desk also refuses while the publisher has a pending transaction."); return; }
       setMsg("Waiting for the publication transaction recorded before the reload…");
       const r = await publicClient.waitForTransactionReceipt({ hash: pending.hash, timeout: 600_000 });
       if (off) return;
-      if (r.status === "success") { setMsg("The publication confirmed."); localStorage.removeItem(PENDING_KEY); reload(); }
-      else { setMsg("The recorded publication reverted. Nothing was published."); localStorage.removeItem(PENDING_KEY); }
-    })().catch((e) => setMsg(describeError(e)));
+      if (r.status === "success") {
+        const ev = r.logs.filter((l) => l.address.toLowerCase() === DAILY.toLowerCase()).map((l) => {
+          try { return decodeEventLog({ abi: dailyAbi, data: l.data, topics: l.topics }); } catch { return null; }
+        }).find((x) => x?.eventName === "IssuePublished" && (x.args as { pdfHash?: string }).pdfHash?.toLowerCase() === pending.content.pdfHash.toLowerCase());
+        const id = (ev?.args as { issueId?: bigint } | undefined)?.issueId;
+        if (!id) throw new Error("The receipt has no matching publication. The recovery record has been kept; check the transaction and retry.");
+        onPending({ ...pending, publishedIssueId: id.toString() });
+        reload();
+      } else { setMsg("The recorded publication reverted. Nothing was published."); onPending(null); }
+    })().catch((e) => { if (!off) setError(describeError(e)); });
     return () => { off = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pending, issues.length]);
-  if (!pending) return null;
+  }, [pending, issues, publications, enabled, onPending, reload, retry]);
+
+  useEffect(() => {
+    if (!pending?.publishedIssueId || !pending.hash || !service || !enabled) return;
+    if (pending.serviceOrigin && pending.serviceOrigin !== service.origin) return;
+    let off = false;
+    setBusy(true); setError("");
+    service.markPublished(pending.content.pdfHash, pending.publishedIssueId, pending.hash).then(() => {
+      if (off) return;
+      setMsg(`Published as No. ${pending.publishedIssueId}. Its summary is available in the archive.`);
+      onPending(null); reload();
+    }).catch((e) => { if (!off) setError(`The edition is published, but its summary could not be made public: ${describeError(e)}. The recovery record has been kept.`); })
+      .finally(() => { if (!off) setBusy(false); });
+    return () => { off = true; };
+  }, [pending, service, enabled, onPending, reload, retry]);
+
+  if (!pending) return msg ? <p className="note" role="status">{msg}</p> : null;
+  const wrongService = pending.serviceOrigin && service && pending.serviceOrigin !== service.origin;
   return (
     <div className="setup" role="status">
-      <p><strong>Pending publication:</strong> {pending.content.title} (predicted No. {pending.predictedId}). {msg}
+      <p><strong>{pending.publishedIssueId ? `Published as No. ${pending.publishedIssueId}:` : "Pending publication:"}</strong> {pending.content.title}.
+        {!pending.publishedIssueId && <> {msg}</>}
         {pending.hash && <> <a href={txUrl(pending.hash)} target="_blank" rel="noopener">Transaction</a></>}</p>
-      {!pending.hash && <button className="btn btn-quiet" onClick={() => { localStorage.removeItem(PENDING_KEY); setPending(null); }}>I checked my wallet: clear this record</button>}
+      {pending.publishedIssueId && !service && <p>Sign in to the upload service below to finish making this edition's summary public. The recovery record is saved in this browser.</p>}
+      {wrongService && <p>Select the original upload service {pending.serviceOrigin} and sign in to finish the summary update.</p>}
+      {busy && <p>Making the published summary available in the archive…</p>}
+      {error && <p className="err">{error}</p>}
+      {error && <button className="btn" disabled={busy} onClick={() => { setError(""); setRetry((n) => n + 1); }}>Retry {pending.publishedIssueId ? "summary update" : "publication check"}</button>}
+      {!pending.hash && !pending.publishedIssueId && <button className="btn btn-quiet" onClick={() => onPending(null)}>I checked my wallet: clear this record</button>}
     </div>
   );
 }
 
 type Check = { label: string; state: "wait" | "run" | "ok" | "err"; detail?: string };
 
-function Compose({ service }: { service: Service }) {
+function Compose({ service, blocked, onPending, onPublishing }: {
+  service: Service; blocked: boolean; onPending: (record: Pending | null) => void; onPublishing: (busy: boolean) => void;
+}) {
   const { address } = useAccount();
   const { data: wallet } = useWalletClient();
   const { issues, reload } = useData();
@@ -139,11 +187,17 @@ function Compose({ service }: { service: Service }) {
   const [prepared, setPrepared] = useState<Prepared | null>(null);
   const [preview, setPreview] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const [pubMsg, setPubMsg] = useState<{ kind: "busy" | "ok" | "err"; text: string; hash?: Hex } | null>(null);
   const source = useMemo(() => (pdfBytes ? { data: pdfBytes } : null), [pdfBytes]);
+  const busy = preparing || pubMsg?.kind === "busy";
+
+  function invalidate() {
+    setPrepared(null); setConfirm(false); setChecks([]); setPubMsg(null);
+  }
 
   async function pick(f: File | null) {
-    setFile(null); setPdfBytes(null); setPrepared(null); setFileErr(""); setChecks([]);
+    invalidate(); setFile(null); setPdfBytes(null); setFileErr("");
     if (!f) return;
     if (f.size > MAX_PDF_BYTES) { setFileErr(`The file is ${(f.size / 1048576).toFixed(0)} MB; the limit is 200 MB.`); return; }
     const bytes = new Uint8Array(await f.arrayBuffer());
@@ -152,10 +206,11 @@ function Compose({ service }: { service: Service }) {
   }
 
   const editorial = dateInputToTimestamp(date);
-  const canPrepare = !!pdfBytes && title.trim().length > 0 && title.length <= 200 && editorial !== null && summary.length <= 1000;
+  const canPrepare = !busy && !blocked && !!pdfBytes && title.trim().length > 0 && title.length <= 200 && editorial !== null && summary.length <= 1000;
 
   async function prepare() {
-    if (!pdfBytes || editorial === null) return;
+    if (!canPrepare || !pdfBytes || editorial === null) return;
+    setPreparing(true);
     const list: Check[] = [
       { label: "Hash the PDF", state: "wait" }, { label: "Draw the cover from page 1", state: "wait" },
       { label: "Upload PDF and cover", state: "wait" }, { label: "Write and upload metadata", state: "wait" },
@@ -196,10 +251,12 @@ function Compose({ service }: { service: Service }) {
       set(5, "ok");
       setPrepared({ predictedId, summary: saved.summary, content: { title: title.trim(), editorialDate: editorial, pdfURL: up.url, coverURL: upCover.url, metadataURI: upMeta.url, pdfHash, coverHash, metadataHash } });
     } catch (e) { set(i, "err", describeError(e)); }
+    finally { setPreparing(false); }
   }
 
   async function publish() {
-    if (!prepared || !wallet || !address) return;
+    if (!prepared || !confirm || !wallet || !address || blocked || readPending()) return;
+    onPublishing(true);
     let hash: Hex | undefined;
     try {
       setPubMsg({ kind: "busy", text: "Checking the chain before publishing…" });
@@ -212,11 +269,11 @@ function Compose({ service }: { service: Service }) {
       if (count + 1n !== prepared.predictedId) throw new Error(`The next issue is now No. ${count + 1n}; prepare the files again so the metadata matches.`);
       if (issues.some((x) => x.pdfHash.toLowerCase() === prepared.content.pdfHash)) throw new Error("This PDF is already published.");
       const { request } = await publicClient.simulateContract({ address: DAILY, abi: dailyAbi, functionName: "createIssue", args: [prepared.content], account: address });
-      const record: Pending = { predictedId: prepared.predictedId.toString(), content: toStored(prepared.content), startedAt: Date.now() };
-      localStorage.setItem(PENDING_KEY, JSON.stringify(record));
+      const record: Pending = { predictedId: prepared.predictedId.toString(), content: toStored(prepared.content), startedAt: Date.now(), serviceOrigin: service.origin };
+      onPending(record);
       setPubMsg({ kind: "busy", text: "Confirm the publication in your wallet." });
       hash = await wallet.writeContract(request);
-      localStorage.setItem(PENDING_KEY, JSON.stringify({ ...record, hash }));
+      onPending({ ...record, hash });
       setPubMsg({ kind: "busy", text: "Publication sent. Waiting for confirmation…", hash });
       const r = await publicClient.waitForTransactionReceipt({ hash });
       if (r.status !== "success") throw new Error("The publication reverted. Nothing was published.");
@@ -228,14 +285,14 @@ function Compose({ service }: { service: Service }) {
       const onchain = (await publicClient.readContract({ address: DAILY, abi: dailyAbi, functionName: "getIssue", args: [id] })) as { content: Content };
       const mismatch = (Object.keys(prepared.content) as (keyof Content)[]).filter((k) => String(onchain.content[k]).toLowerCase() !== String(prepared.content[k]).toLowerCase());
       if (mismatch.length) throw new Error(`On-chain fields differ: ${mismatch.join(", ")}`);
-      localStorage.removeItem(PENDING_KEY);
-      await service.markPublished(prepared.content.pdfHash, id.toString(), hash).catch(() => undefined);
+      // Keep chain confirmation durable until the authenticated service update succeeds.
+      onPending({ ...record, hash, publishedIssueId: id.toString() });
       setPubMsg({ kind: "ok", text: `Published No. ${id}. Its 24-hour collecting window has started.`, hash });
       setPrepared(null); reload();
     } catch (e) {
-      if (!hash) localStorage.removeItem(PENDING_KEY);
+      if (!hash) onPending(null);
       setPubMsg({ kind: "err", text: describeError(e), hash });
-    }
+    } finally { onPublishing(false); }
   }
 
   return (
@@ -243,16 +300,17 @@ function Compose({ service }: { service: Service }) {
       <h3 className="h-sub">3. Prepare the edition</h3>
       <div className="form-grid">
         <label htmlFor="pdf">PDF file, up to 200 MB</label>
-        <input id="pdf" type="file" accept="application/pdf,.pdf" onChange={(e) => pick(e.target.files?.[0] ?? null)} aria-describedby="pdf-err" />
+        <input id="pdf" type="file" accept="application/pdf,.pdf" disabled={busy || blocked} onChange={(e) => pick(e.target.files?.[0] ?? null)} aria-describedby="pdf-err" />
         {fileErr && <p id="pdf-err" className="err">{fileErr}</p>}
         <label htmlFor="title">Title</label>
-        <input id="title" className="field" maxLength={200} value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input id="title" className="field" maxLength={200} value={title} disabled={busy || blocked} onChange={(e) => { invalidate(); setTitle(e.target.value); }} />
         <label htmlFor="date">Editorial date (UTC)</label>
-        <input id="date" className="field" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={editorial === null} />
+        <input id="date" className="field" type="date" value={date} disabled={busy || blocked} onChange={(e) => { invalidate(); setDate(e.target.value); }} aria-invalid={editorial === null} />
         <label htmlFor="summary">Summary, plain text, up to 1,000 characters</label>
-        <textarea id="summary" className="field" rows={4} maxLength={1000} value={summary} onChange={(e) => setSummary(e.target.value)} />
+        <textarea id="summary" className="field" rows={4} maxLength={1000} value={summary} disabled={busy || blocked} onChange={(e) => { invalidate(); setSummary(e.target.value); }} />
       </div>
       <p className="fine">Preparing uploads the files and checks them. It does not publish and does not open a collecting window.</p>
+      {blocked && <p className="note">Finish the saved publication and summary update above before preparing another edition.</p>}
       <p className="read-actions">
         <button className="btn btn-primary" disabled={!canPrepare} onClick={prepare}>Upload and verify files</button>
         <button className="btn" disabled={!pdfBytes} onClick={() => setPreview(true)}>Preview in the reader</button>
@@ -271,6 +329,9 @@ function Compose({ service }: { service: Service }) {
           <h3 className="h-sub">4. Publish on chain</h3>
           <dl className="record num">
             <dt>Issue</dt><dd>No. {prepared.predictedId.toString()}</dd>
+            <dt>Title</dt><dd>{prepared.content.title}</dd>
+            <dt>Date (UTC)</dt><dd>{new Date(Number(prepared.content.editorialDate) * 1000).toISOString().slice(0, 10)}</dd>
+            <dt>Summary</dt><dd>{prepared.summary || "No summary"}</dd>
             <dt>PDF</dt><dd className="hash">{prepared.content.pdfURL}</dd>
             <dt>Cover</dt><dd className="hash">{prepared.content.coverURL}</dd>
             <dt>Metadata</dt><dd className="hash">{prepared.content.metadataURI}</dd>
@@ -278,7 +339,7 @@ function Compose({ service }: { service: Service }) {
           </dl>
           <label className="check"><input type="checkbox" checked={confirm} onChange={(e) => setConfirm(e.target.checked)} />
             I understand this records the files permanently and opens a 24-hour collecting window that cannot be edited, extended or reopened.</label>
-          <button className="btn btn-primary" disabled={!confirm || pubMsg?.kind === "busy"} onClick={publish}>Publish No. {prepared.predictedId.toString()} on Ethereum</button>
+          <button className="btn btn-primary" disabled={!confirm || busy || blocked} onClick={publish}>Publish No. {prepared.predictedId.toString()} on Ethereum</button>
         </div>
       )}
       {pubMsg && <p role="status" className={pubMsg.kind === "err" ? "err" : pubMsg.kind === "ok" ? "ok" : ""}>{pubMsg.text} {pubMsg.hash && <a href={txUrl(pubMsg.hash)} target="_blank" rel="noopener">Etherscan</a>}</p>}

@@ -25,6 +25,8 @@ export function Reader({ source, title, downloadUrl, downloadName, onClose }: Pr
   const [fitWidth, setFitWidth] = useState(800);
   const shell = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  const navigation = useRef<{ page: number; top: number } | null>(null);
+  const width = Math.round(fitWidth * zoom);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,9 +54,41 @@ export function Reader({ source, title, downloadUrl, downloadName, onClose }: Pr
   }, []);
 
   const goTo = useCallback((n: number) => {
-    const target = scroller.current?.querySelector<HTMLElement>(`[data-page="${n}"]`);
-    target?.scrollIntoView({ block: "start" });
+    const root = scroller.current;
+    const target = root?.querySelector<HTMLElement>(`[data-page="${n}"]`);
+    if (!root || !target) return;
+    setPage(n); setPageInput(String(n));
+    // Move only vertically: retain the reader's horizontal position when zoomed in.
+    root.scrollTop += target.getBoundingClientRect().top - root.getBoundingClientRect().top - parseFloat(getComputedStyle(root).paddingTop);
+    navigation.current = { page: n, top: root.scrollTop };
   }, []);
+
+  useEffect(() => { navigation.current = null; }, [doc, width]);
+
+  useEffect(() => {
+    const root = scroller.current;
+    if (!root || !doc) return;
+    let frame = 0;
+    const updatePage = () => {
+      frame = 0;
+      // A short final page may not reach the top. Keep an explicit destination until
+      // the reader scrolls vertically, rather than replacing it with a preceding page.
+      if (navigation.current && Math.abs(root.scrollTop - navigation.current.top) < 1) return;
+      navigation.current = null;
+      const top = root.getBoundingClientRect().top + parseFloat(getComputedStyle(root).paddingTop) + 1;
+      let current = 1, nearest = Infinity;
+      root.querySelectorAll<HTMLElement>("[data-page]").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const distance = Math.abs(r.top - top);
+        if (distance < nearest) { nearest = distance; current = Number(el.dataset.page); }
+      });
+      setPage(current); setPageInput(String(current));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(updatePage); };
+    root.addEventListener("scroll", onScroll, { passive: true });
+    updatePage();
+    return () => { root.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
+  }, [doc, width, sizes]);
 
   useEffect(() => {
     const onFs = () => setFull(document.fullscreenElement === shell.current);
@@ -89,7 +123,6 @@ export function Reader({ source, title, downloadUrl, downloadName, onClose }: Pr
     return next ?? z;
   });
 
-  const width = Math.round(fitWidth * zoom);
   const n = doc?.numPages ?? 0;
 
   return (
@@ -123,17 +156,16 @@ export function Reader({ source, title, downloadUrl, downloadName, onClose }: Pr
         {!error && !doc && <p className="reader-msg" role="status">Opening the edition… {loaded > 0 ? `${(loaded / 1048576).toFixed(1)} MB received` : ""}</p>}
         {doc && sizes.map((s, i) => (
           <PageView key={i} doc={doc} index={i + 1} width={width} size={s} scrollRoot={scroller}
-            onSize={(w, h) => setSizes((prev) => (prev[i].w === w && prev[i].h === h ? prev : prev.map((p, k) => (k === i ? { w, h } : p))))}
-            onVisible={() => { setPage(i + 1); setPageInput(String(i + 1)); }} />
+            onSize={(w, h) => setSizes((prev) => (prev[i].w === w && prev[i].h === h ? prev : prev.map((p, k) => (k === i ? { w, h } : p))))} />
         ))}
       </div>
     </div>
   );
 }
 
-function PageView({ doc, index, width, size, scrollRoot, onSize, onVisible }: {
+function PageView({ doc, index, width, size, scrollRoot, onSize }: {
   doc: PDFDoc; index: number; width: number; size: { w: number; h: number };
-  scrollRoot: React.RefObject<HTMLDivElement | null>; onSize: (w: number, h: number) => void; onVisible: () => void;
+  scrollRoot: React.RefObject<HTMLDivElement | null>; onSize: (w: number, h: number) => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
@@ -144,9 +176,8 @@ function PageView({ doc, index, width, size, scrollRoot, onSize, onVisible }: {
     const el = box.current;
     if (!el) return;
     const far = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { root: scrollRoot.current, rootMargin: "150% 0px" });
-    const seen = new IntersectionObserver(([e]) => { if (e.isIntersecting) onVisible(); }, { root: scrollRoot.current, threshold: 0.5 });
-    far.observe(el); seen.observe(el);
-    return () => { far.disconnect(); seen.disconnect(); };
+    far.observe(el);
+    return () => far.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,0 +1,2 @@
+{"level":"info","ts":1792573358.6835632,"msg":"using config from file","file":"server/Caddyfile"}
+Error: adapting config using caddyfile: parsing caddyfile tokens for 'encode': unrecognized response matcher not, at server/Caddyfile:7

@@ -2,6 +2,8 @@
 
 Independent, non-upgradeable ERC1155 newspaper collectibles on Ethereum. The collection is named **The IMD Daily**, symbol **IMDDAILY**. Deployment creates zero issues and zero copies. There is no new ERC20, pool, website, or change to UNLOCK.
 
+The contract-release notes below are the original handoff. The later website source is in `web/`, and its finished static export is in `dist/`. It connects to the already deployed Ethereum contracts documented in `web/src/config.ts`; this frontend revision deploys no contracts.
+
 **Release status: implemented and locally tested; not deployed or published to GitHub by this worker.** The mainnet fork is a simulation, not a deployment. IMD's subsequent manifest, independent review, and deployment stages must supply the confirmed addresses, receipts, source commit, GitHub URL, and Etherscan verification links. See [release handoff](docs/RELEASE.md) and [machine-readable status](evidence/release-status.json). No sample or real issue is to be published during deployment.
 
 ## Fixed configuration
@@ -69,3 +71,43 @@ After launch, no contract setup transaction is required. The publisher is respon
 
 Only send mint payments through `mint`. IMD sent directly to the collection, unrelated tokens, and forcibly delivered ETH have no recovery function. Direct IMD donations to the vault can be withdrawn by the publisher and are not mint revenue.
 
+
+## Website: install, preview and rebuild
+
+Use Node.js 24. From the repository root:
+
+```sh
+cd web
+npm ci
+npm run typecheck
+npm test
+npm run build
+npm run preview -- --host 127.0.0.1
+```
+
+Open the local URL printed by Vite. The production build writes `dist/` at the repository root, with relative asset URLs and a bundled PDF.js worker. Keep that complete export with the source and the existing lockfile. Hash routes support static hosting and gateway subpaths.
+
+The static frontend is ready for IMD publication. The new HTTPS site URL and submission commit must be supplied by IMD's delivery step; this worker has not assigned a hostname or pushed a commit. The existing source repository is [launch-2368-the-imd-daily](https://github.com/identity-md-launches/launch-2368-the-imd-daily). The VPS service is **not deployed**. Its [installation, HTTPS, CORS, backup and migration guide](docs/VPS_SETUP.md) explains the remaining server setup. Public reading works without that service; unconfigured publishing shows a setup state.
+
+## Revision validation
+
+All eight reopened findings were reproduced and fixed. Actual commands, measurements, screenshots, six-domain Better Interface coverage and limitations are in [artifacts/validation.md](artifacts/validation.md). Machine-readable answers are in `.imd-responses.json`.
+
+This revision passed production build and typecheck, 12 frontend logic tests, 14 service/restore tests, Chromium interaction checks and all 16 taste checks. Browser checks include 320/390px vault reflow, 390/1440px PDF edges and navigation, a 52,921,453-byte raster PDF with range reads and download, RPC outage/retry, preparation invalidation, and publication/summary recovery after reload. All browser chain, wallet and service responses are local fixtures; no real publication or purchase was sent. WebKit could not launch because host libraries were missing; physical-device and screen-reader testing remain unperformed. Docker Compose deployment was not run; the actual Caddy configuration was validated with official Caddy 2.10.2, and the restore command was tested with BusyBox 1.37 tar.
+
+To repeat the browser regressions after building, install Playwright outside the repository and set its module path (no manifest changes are needed):
+
+```sh
+npm install --prefix /tmp/imd-browser playwright
+PLAYWRIGHT_BROWSERS_PATH=/tmp/imd-browsers /tmp/imd-browser/node_modules/.bin/playwright install chromium webkit
+cd web
+IMD_PLAYWRIGHT=/tmp/imd-browser/node_modules/playwright/index.mjs PLAYWRIGHT_BROWSERS_PATH=/tmp/imd-browsers node scripts/validate-revision.mjs
+```
+
+The script serves the committed export under `/preview/`, generates clearly marked test PDFs only in `test/scratch/`, blocks external requests and closes its browser/server afterward. It records a WebKit skip if that browser cannot launch. To run service and restore tests without production credentials:
+
+```sh
+cd server
+npm ci
+npm test
+```

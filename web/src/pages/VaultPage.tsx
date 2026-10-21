@@ -40,15 +40,15 @@ export function VaultPage() {
           <table className="figures num">
             <caption className="sr-only">Vault accounting at block {f.block.toString()}</caption>
             <tbody>
-              <tr><th scope="row">Collected from copies</th><td>{formatIMD(f.collected)} IMD</td><td className="fine">IMDDaily.totalCollected</td></tr>
-              <tr><th scope="row">Withdrawn by the publisher</th><td>{formatIMD(f.withdrawn)} IMD</td><td className="fine">IMDDailyVault.totalWithdrawn</td></tr>
-              <tr><th scope="row">Held in the vault now</th><td>{formatIMD(f.balance)} IMD</td><td className="fine">IMDDailyVault.balance</td></tr>
-              <tr><th scope="row">Sent directly (donations)</th><td>{donations !== null && donations >= 0n ? `${formatIMD(donations)} IMD` : "Not derivable"}</td><td className="fine">balance + withdrawn − collected</td></tr>
+              <tr><th scope="row">Collected from copies</th><td>{formatIMD(f.collected)} IMD</td></tr>
+              <tr><th scope="row">Withdrawn by the publisher</th><td>{formatIMD(f.withdrawn)} IMD</td></tr>
+              <tr><th scope="row">Held in the vault now</th><td>{formatIMD(f.balance)} IMD</td></tr>
+              <tr><th scope="row">Sent directly (donations)</th><td>{donations !== null && donations >= 0n ? `${formatIMD(donations)} IMD` : "Not derivable"}</td></tr>
             </tbody>
           </table>
         )}
         {f && <p className="fine num">Read at block {f.block.toString()}. IMD balanceOf(vault) reports {formatIMD(f.tokenBalance)} IMD. Donations are IMD sent to the vault outside a mint; they never count as collected revenue.</p>}
-        <p className="fine">Withdrawals go only to the publisher wallet <a href={addressUrl(PUBLISHER)} target="_blank" rel="noopener">{PUBLISHER}</a>; the contract has no other recipient. Nothing is withdrawn automatically.</p>
+        <p className="fine">Withdrawals go only to the publisher wallet <a className="hash" href={addressUrl(PUBLISHER)} target="_blank" rel="noopener">{PUBLISHER}</a>; the contract has no other recipient. Nothing is withdrawn automatically.</p>
       </div>
       <aside className="col-side"><Withdraw max={f?.balance ?? null} onDone={load} /></aside>
     </section>

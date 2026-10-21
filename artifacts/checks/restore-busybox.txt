@@ -1,0 +1,13 @@
+✔ restore preserves object paths, bytes and draft metadata before reporting success (59.627682ms)
+✔ a hash mismatch fails and never prints success (48.748259ms)
+✔ a corrupt archive propagates extraction failure (44.978818ms)
+✔ existing files are never overwritten and tar refusal is reported as failure (55.267927ms)
+✔ a missing archive is refused (2.016491ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 301.818804

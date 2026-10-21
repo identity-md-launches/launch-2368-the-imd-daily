@@ -1,0 +1,198 @@
+[
+  {
+    "test": "reader",
+    "browser": "chromium",
+    "width": 390,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": 12,
+      "width": 732,
+      "viewport": 390
+    },
+    "nav": [
+      "2",
+      "3",
+      "4"
+    ],
+    "scrolling": {
+      "top": 3141,
+      "page": 161
+    }
+  },
+  {
+    "test": "reader-right-edge",
+    "browser": "chromium",
+    "width": 390,
+    "edge": 378,
+    "viewport": 390
+  },
+  {
+    "test": "fit-navigation",
+    "browser": "chromium",
+    "width": 390,
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "small-page-navigation",
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "synthetic-pinch-zoom",
+    "zoom": "150%",
+    "left": 12
+  },
+  {
+    "test": "reader",
+    "browser": "chromium",
+    "width": 1440,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": 12,
+      "width": 2000,
+      "viewport": 1440
+    },
+    "nav": [
+      "2",
+      "3",
+      "4"
+    ],
+    "scrolling": {
+      "top": 8523,
+      "page": 65
+    }
+  },
+  {
+    "test": "reader-right-edge",
+    "browser": "chromium",
+    "width": 1440,
+    "edge": 1428,
+    "viewport": 1440
+  },
+  {
+    "test": "fit-navigation",
+    "browser": "chromium",
+    "width": 1440,
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "vault",
+    "browser": "chromium",
+    "width": 320,
+    "scroll": 320,
+    "client": 320,
+    "table": 280
+  },
+  {
+    "test": "vault",
+    "browser": "chromium",
+    "width": 390,
+    "scroll": 390,
+    "client": 390,
+    "table": 349.53125
+  },
+  {
+    "test": "empty-archive-navigation",
+    "passed": true
+  },
+  {
+    "test": "large-raster-reader-download",
+    "bytes": 52921453,
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ],
+    "rangeRequests": 2,
+    "color": [
+      255,
+      0,
+      0,
+      255
+    ]
+  },
+  {
+    "test": "outage",
+    "route": "issue",
+    "text": "Skip to content\nWednesday, October 21, 2026\nConnect\nThe IMD Daily\nNo edition published yet\nEthereum edition\nToday\nArchive\nMy Collection\nVault\nAbout\n\nThe edition could not be checked. Try again. Retry\n\nThe IMD Daily · ERC-1155 on Ethereum\nPublisher desk"
+  },
+  {
+    "test": "outage",
+    "route": "read",
+    "text": "The edition could not be checked. Try again. Retry"
+  },
+  {
+    "test": "prepared-edit",
+    "invalidated": true,
+    "sent": {
+      "title": "Title B reviewed for publication",
+      "editorialDate": "1792454400"
+    },
+    "summary": "Summary B unique-term"
+  },
+  {
+    "test": "recovery",
+    "beforeAuth": true,
+    "markCalls": [
+      {
+        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
+        "issueId": "2",
+        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
+        "issueId": "2",
+        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
+        "issueId": "2",
+        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "pending": null,
+    "summaryPublished": true
+  },
+  {
+    "test": "receipt-only-recovery",
+    "passed": true,
+    "markCalls": [
+      {
+        "pdfHash": "0x40d625a9d79181864d145c115270e9f038d7e46e86664b9d4350926be139099f",
+        "issueId": "3",
+        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ]
+  },
+  {
+    "test": "normal-confirmation-summary-failure-reload",
+    "passed": true,
+    "submittedTransactions": 1,
+    "serviceAttempts": 3
+  },
+  {
+    "test": "missing-hash-recovery-from-index",
+    "passed": true
+  },
+  {
+    "test": "browser-availability",
+    "browser": "webkit",
+    "skipped": true,
+    "reason": "Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Missing libraries:                                   ║\n║     libgtk-4.so.1                                    ║\n║     libpangocairo-1.0.so.0                           ║\n║     libgdk_pixbuf-2.0.so.0                           ║\n║     libcairo-gobject.so.2   "
+  },
+  {
+    "test": "runtime-errors",
+    "errors": []
+  }
+]

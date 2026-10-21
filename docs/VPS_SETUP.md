@@ -23,18 +23,22 @@ The server holds no private key and needs no secret.
    - `FILES_DOMAIN=yourname-imd-daily.duckdns.org`
    - `PUBLIC_FILE_ORIGIN=https://yourname-imd-daily.duckdns.org`
    - `ALLOWED_ORIGINS=` the exact origin of the IMD site URL (for example `https://the-imd-daily.<imd host>`), comma-separated if more than one.
-6. `docker compose up -d --build`. Caddy obtains a Let's Encrypt certificate for `FILES_DOMAIN` automatically.
+6. Validate the HTTPS proxy before starting it:
+   `docker compose run --rm --no-deps --entrypoint caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile`.
+   Then run `docker compose up -d --build`. Caddy obtains a Let's Encrypt certificate for `FILES_DOMAIN` automatically. The proxy leaves file bytes and byte-range responses unencoded.
 7. Check: `curl https://yourname-imd-daily.duckdns.org/health` returns `{"ok":true,...}`.
 8. On the site, open Publisher desk, enter `https://yourname-imd-daily.duckdns.org` under "Service origin for this browser" and save. No rebuild is needed. (To make it the default for every browser, set `apiOrigin` in `dist/service.json` at the next site release.)
 
 ## Daily publishing
 
-Publisher desk → connect the publisher wallet → sign in (free signature) → choose PDF, title, date, summary → "Upload and verify files" (uploads PDF, cover rendered from page 1, and metadata; refetches all three public URLs anonymously and matches SHA-256) → preview → tick the confirmation → "Publish No. N on Ethereum". Only that last step sends `createIssue` and starts the 24-hour window. A reload during publication is recovered from this browser's record and the chain; a PDF already on chain is refused.
+Publisher desk → connect the publisher wallet → sign in (free signature) → choose PDF, title, date, summary → "Upload and verify files" (uploads PDF, cover rendered from page 1, and metadata; refetches all three public URLs anonymously and matches SHA-256) → preview → review the final title/date/summary → tick the confirmation → "Publish No. N on Ethereum". Editing the PDF, title, date or summary clears preparation and confirmation; upload and verify again. Only publication sends `createIssue` and starts the 24-hour window.
+
+A reload during publication is recovered from this browser's record and the chain; a PDF already on chain is refused. After confirmation, the record remains until the upload service acknowledges the summary update. Sign in again after reloading to complete that update. If the service is unavailable, the desk identifies the edition as published and offers **Retry summary update**; do not publish it again. New preparation stays disabled until recovery is finished. Keep this browser's storage and use the original upload-service origin saved in the record.
 
 ## Backups and restore
 
 - `./backup.sh` writes `backups/imd-daily-<UTC>.tar.gz` with `objects/` and `drafts.json`. Copy it off the server (for example `rsync` to another machine) on a schedule, e.g. a daily cron entry `0 3 * * * cd ~/imd-daily && ./backup.sh`.
-- `./restore.sh backups/<file>.tar.gz` unpacks into the data volume without overwriting existing objects and re-verifies every object's SHA-256 against its file name.
+- On a new server with an empty data volume, `./restore.sh backups/<file>.tar.gz` unpacks the original paths and re-verifies every object's SHA-256 against its file name. The script uses Alpine/BusyBox's `tar -k` to prevent overwrites. An existing file, extraction error or hash mismatch returns a nonzero status; `restored` is printed only after extraction and all hash checks succeed. Treat an error as an incomplete restore. Retain the backup, inspect the reported problem and retry into a fresh volume; never overwrite existing published objects to force success.
 
 ## Migration
 

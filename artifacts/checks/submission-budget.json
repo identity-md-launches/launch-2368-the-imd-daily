@@ -1,0 +1,25 @@
+{
+  "limitBytes": 8388608,
+  "submissionFileCount": 194,
+  "totalFileBytes": 5966979,
+  "pathBudgets": {
+    "responses": {
+      "limitBytes": 16384,
+      "actualBytes": 5566
+    },
+    "validation": {
+      "limitBytes": 32768,
+      "actualBytes": 13664
+    },
+    "checkReports": {
+      "limitBytes": 131072,
+      "actualBytes": 45378
+    },
+    "screenshots": {
+      "limitBytes": 1048576,
+      "actualBytes": 698332
+    }
+  },
+  "protectedFilesUnchanged": true,
+  "generatedDependenciesOrCachesIncluded": false
+}

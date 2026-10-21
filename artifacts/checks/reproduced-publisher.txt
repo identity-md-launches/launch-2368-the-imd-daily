@@ -1,0 +1,33 @@
+launched chromium before publisher
+publisher navigate
+publisher connect
+wallet buttons Connect a wallet
+×
+Local fixture wallet
+Coinbase Wallet
+
+Reading and downloads never need a wallet. Connect only to collect a copy.
+wallet buttons Connect a wallet
+×
+Local fixture wallet
+Coinbase Wallet
+
+Reading and downloads never need a wallet. Connect only to collect a copy.
+[
+  {
+    "test": "prepared-edit",
+    "invalidated": false,
+    "sent": {
+      "title": "Title A before upload",
+      "editorialDate": "1792540800"
+    },
+    "summary": "Summary A"
+  },
+  {
+    "test": "recovery",
+    "beforeAuth": false,
+    "markCalls": [],
+    "pending": null,
+    "summaryPublished": false
+  }
+]
