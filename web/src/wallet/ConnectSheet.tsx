@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useAccount, useConnect, useDisconnect, useSwitchChain, type Connector } from "wagmi";
 import { CHAIN_ID, CHAIN_NAME, WALLET_ADD_CHAIN } from "../config";
 import { shortAddress } from "../lib/format";
@@ -7,7 +8,7 @@ import { WALLET_ICONS, svgData } from "./icons";
 import { OPEN_IN, isMobileBrowser } from "./open-in";
 
 /** The single connect control and its sheet, in the newspaper's own type and colours. */
-export function ConnectSheet() {
+export function ConnectSheet({ label: buttonLabel = "Connect wallet" }: { label?: string }) {
   const mobile = isMobileBrowser();
   const { address, isConnected, chainId, connector: active } = useAccount();
   const { connectors, connect, isPending, variables } = useConnect();
@@ -20,10 +21,28 @@ export function ConnectSheet() {
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const root = document.getElementById("root");
+    const wasInert = root?.inert ?? false;
+    const oldOverflow = document.body.style.overflow;
+    if (root) root.inert = true;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Tab") {
+        const items = [...(sheet.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled)') ?? [])];
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+    };
     addEventListener("keydown", onKey);
     sheet.current?.querySelector<HTMLElement>("button, a")?.focus();
-    return () => { removeEventListener("keydown", onKey); opener.current?.focus(); };
+    return () => {
+      removeEventListener("keydown", onKey);
+      if (root) root.inert = wasInert;
+      document.body.style.overflow = oldOverflow;
+      opener.current?.focus();
+    };
   }, [open]);
   useEffect(() => { if (isConnected) setOpen(false); }, [isConnected]);
 
@@ -58,8 +77,8 @@ export function ConnectSheet() {
   }
   return (
     <>
-      <button ref={opener} className="btn btn-primary" onClick={() => { setNote(""); setOpen(true); }}>Connect</button>
-      {open && (
+      <button ref={opener} className="btn btn-primary" onClick={() => { setNote(""); setOpen(true); }}>{buttonLabel}</button>
+      {open && createPortal(
         <div className="sheet-bg" onClick={() => setOpen(false)}>
           <div ref={sheet} className="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" onClick={(e) => e.stopPropagation()}>
             <div className="sheet-head">
@@ -82,7 +101,7 @@ export function ConnectSheet() {
             {note && <p className="note" role="status">{note}</p>}
             <p className="fine">Reading and downloads never need a wallet. Connect only to collect a copy.</p>
           </div>
-        </div>
+        </div>, document.body
       )}
     </>
   );

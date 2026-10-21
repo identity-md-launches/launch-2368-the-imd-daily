@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { openPdf, pdfjs, renderScale, type PDFDoc } from "../lib/pdf";
+import { DownloadLink } from "./DownloadLink";
 
 type Props = {
   source: { url: string } | { data: Uint8Array };
@@ -147,7 +148,7 @@ export function Reader({ source, title, downloadUrl, downloadName, onClose }: Pr
         </span>
         <span className="reader-group">
           <button className="btn btn-quiet" onClick={toggleFull}>{full ? "Exit full screen" : "Full screen"}</button>
-          {downloadUrl && <a className="btn btn-quiet" href={downloadUrl} download={downloadName} target="_blank" rel="noopener">Download</a>}
+          {downloadUrl && <DownloadLink className="btn btn-quiet" url={downloadUrl} filename={downloadName ?? "imd-daily.pdf"}>Download</DownloadLink>}
         </span>
       </div>
       <div ref={scroller} className="reader-pages" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}

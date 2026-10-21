@@ -1,10 +1,12 @@
-# The IMD Daily contracts
+# The IMD Daily
 
-Independent, non-upgradeable ERC1155 newspaper collectibles on Ethereum. The collection is named **The IMD Daily**, symbol **IMDDAILY**. Deployment creates zero issues and zero copies. There is no new ERC20, pool, website, or change to UNLOCK.
+Independent, non-upgradeable ERC1155 newspaper collectibles on Ethereum. The collection is named **The IMD Daily**, symbol **IMDDAILY**. Deployment creates zero issues and zero copies. The frontend reads the existing Ethereum contracts; this redesign creates no token, pool or contract and makes no change to UNLOCK.
 
 The contract-release notes below are the original handoff. The later website source is in `web/`, and its finished static export is in `dist/`. It connects to the already deployed Ethereum contracts documented in `web/src/config.ts`; this frontend revision deploys no contracts.
 
-**Release status: implemented and locally tested; not deployed or published to GitHub by this worker.** The mainnet fork is a simulation, not a deployment. IMD's subsequent manifest, independent review, and deployment stages must supply the confirmed addresses, receipts, source commit, GitHub URL, and Etherscan verification links. See [release handoff](docs/RELEASE.md) and [machine-readable status](evidence/release-status.json). No sample or real issue is to be published during deployment.
+The deployed collection is `0xb8fd2b7fb37cbf03a26b4c4688ed5cce86c0a9c5` and its vault is `0x3343692c3667852a1d4a7d8052c24862e6c523c0` on Ethereum mainnet. This revision starts from accepted frontend commit `bd592f73cce24af973c6d2c67069be392db5bdb9`. Contracts, ABIs, economics, issue content, immutable hashes and publication windows remain unchanged.
+
+The redesigned site is a midnight independent newsroom, with original frog reporter artwork and a real first-page PDF cover. [DESIGN.md](DESIGN.md) describes the implemented design; [artwork prompts and assets](docs/ARTWORK.md) records the illustrations and font licenses.
 
 ## Fixed configuration
 
@@ -87,15 +89,26 @@ npm run preview -- --host 127.0.0.1
 
 Open the local URL printed by Vite. The production build writes `dist/` at the repository root, with relative asset URLs and a bundled PDF.js worker. Keep that complete export with the source and the existing lockfile. Hash routes support static hosting and gateway subpaths.
 
-The static frontend is ready for IMD publication. The new HTTPS site URL and submission commit must be supplied by IMD's delivery step; this worker has not assigned a hostname or pushed a commit. The existing source repository is [launch-2368-the-imd-daily](https://github.com/identity-md-launches/launch-2368-the-imd-daily). The VPS service is **not deployed**. Its [installation, HTTPS, CORS, backup and migration guide](docs/VPS_SETUP.md) explains the remaining server setup. Public reading works without that service; unconfigured publishing shows a setup state.
+The requested delivery label is **the-imd-daily**, at `https://the-imd-daily.sites.imd.fun`. Hosting status and any naming blocker are recorded in [validation](artifacts/validation.md). The previous site is kept in place. The shipped upload default is the existing **https://the-imd-daily.duckdns.org** service; a valid origin previously saved in the same browser still wins. Wallet authorization, upload hashes and publication recovery remain intact. Browser storage belongs to each origin; a new hostname cannot read the old hostname’s browser settings or wallet session, so a visitor may need to reconnect or save a custom origin again.
 
-## Revision validation
+The frontend needs Node.js 24. Install with the existing `web/package-lock.json`, preview with the command above, and rebuild with `npm run build`. Vite writes relative URLs to the root `dist/`, including the PDF worker, local fonts and artwork. Serve the whole directory on a static host. Routes use hashes, so no server rewrite is needed. The uploaded PDF and immutable cover remain on the existing VPS and are not replaced by generated artwork.
 
-All eight reopened findings were reproduced and fixed. Actual commands, measurements, screenshots, six-domain Better Interface coverage and limitations are in [artifacts/validation.md](artifacts/validation.md). Machine-readable answers are in `.imd-responses.json`.
+## Validation for this redesign
 
-This revision passed production build and typecheck, 12 frontend logic tests, 14 service/restore tests, Chromium interaction checks and all 16 taste checks. Browser checks include 320/390px vault reflow, 390/1440px PDF edges and navigation, a 52,921,453-byte raster PDF with range reads and download, RPC outage/retry, preparation invalidation, and publication/summary recovery after reload. All browser chain, wallet and service responses are local fixtures; no real publication or purchase was sent. WebKit could not launch because host libraries were missing; physical-device and screen-reader testing remain unperformed. Docker Compose deployment was not run; the actual Caddy configuration was validated with official Caddy 2.10.2, and the restore command was tested with BusyBox 1.37 tar.
+See [artifacts/validation.md](artifacts/validation.md) for actual results, live versus mocked coverage, browser limitations and screenshots. Unit tests include exact arithmetic, mint deadlines, expiry latching, indexing, saved service settings, failed authentication and hash verification.
 
-To repeat the browser regressions after building, install Playwright outside the repository and set its module path (no manifest changes are needed):
+Repeat the local checks:
+
+```sh
+cd web
+npm ci
+npm run typecheck
+npm test
+npm run check:abi
+npm run build
+```
+
+Browser tools are installed outside the repository. To repeat the isolated regression suite after building:
 
 ```sh
 npm install --prefix /tmp/imd-browser playwright
@@ -104,7 +117,18 @@ cd web
 IMD_PLAYWRIGHT=/tmp/imd-browser/node_modules/playwright/index.mjs PLAYWRIGHT_BROWSERS_PATH=/tmp/imd-browsers node scripts/validate-revision.mjs
 ```
 
-The script serves the committed export under `/preview/`, generates clearly marked test PDFs only in `test/scratch/`, blocks external requests and closes its browser/server afterward. It records a WebKit skip if that browser cannot launch. To run service and restore tests without production credentials:
+That suite uses only local fixtures and blocks external traffic. It validates exact approvals, transaction rejection/reverts, pending and receipt UI, expiry, reader controls and large PDFs, narrow vault layouts, and publisher preparation/recovery. It sends no real transaction and publishes no real issue. It closes its browsers and foreground server on completion. Missing WebKit host libraries are reported explicitly.
+
+The separate read-only integration suite uses real chain state and issue files:
+
+```sh
+cd web
+IMD_PLAYWRIGHT=/tmp/imd-browser/node_modules/playwright/index.mjs PLAYWRIGHT_BROWSERS_PATH=/tmp/imd-browsers node scripts/validate-live.mjs
+```
+
+It locally serves the production export at the requested HTTPS origin inside the test browser to verify the existing service’s actual CORS and login boundary. It does not prove that the hostname is hosted. Set `IMD_HOSTED=1` to check the actual hosted site instead. `IMD_BROWSER=webkit` selects WebKit. An optional `IMD_RPC_URL` selects a contributor RPC for read-only tests; the shipped site retains the public Ethereum endpoints. No wallet signature, purchase, upload, content write or publication is performed by this live suite.
+
+Service and restore checks use temporary data only:
 
 ```sh
 cd server

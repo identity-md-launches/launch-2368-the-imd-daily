@@ -1,72 +1,174 @@
-# Revision validation
+# The IMD Daily newsroom redesign: validation
 
-This revision fixes the eight reproduced findings against accepted source commit `a5bf9db5921da5c24110791489b3326ca3116de5`. It retains the newspaper design, deployed contracts, ABIs, addresses, wallet connectors, dependencies and build configuration. The source changes are limited to reader geometry/navigation, vault presentation, initial chain-read errors, publisher preparation/recovery, and the two VPS scripts/configuration reported by the reviewer.
+This is the worker’s local validation record, not independent certification. The frontend and production export are implemented and checked. **Hosting and the submission commit remain the delivery plane’s final step.** No real transaction, purchase, issue publication, mint reset, price change, withdrawal or content/storage migration was performed.
 
-## Results
+## Scope and delivery status
 
-| Check | Actual result | Evidence |
+| Area | Result |
+| --- | --- |
+| Accepted starting source | `bd592f73cce24af973c6d2c67069be392db5bdb9` |
+| Production export | Complete `dist/`, source in `web/`, original manifest and lockfile retained |
+| Requested hostname/label | `https://the-imd-daily.sites.imd.fun` / `the-imd-daily` |
+| Hosting | Pending delivery plane; worker publish command was refused |
+| Previous site | No publish, deletion, redirect or replacement was performed against it |
+| Existing VPS | `https://the-imd-daily.duckdns.org`, shipped default; valid saved browser settings take precedence |
+| Original illustrations | Three finished originals bundled as optimized WebP plus PNG/JPEG fallbacks; prompts in `docs/ARTWORK.md` |
+| Real issue content | Existing issue 1; its cover, PDF, metadata and saved summary retained |
+| Contracts/economics | Existing chain 1 contracts and ABIs retained; 0.1 IMD/copy, ETH gas only |
+| Protected paths | Build configuration, manifests, lockfiles, dependencies, contracts, `.github/` and environment files unchanged |
+| Git internals | Worker did not modify `.git/`; submission commit is handled by delivery |
+| Required screenshots | `artifacts/browser/1440.png`, `artifacts/browser/390.png` |
+| Design documentation | Root `DESIGN.md`, extracted from final source and checked against rendered output |
+
+The explicit art direction takes precedence over the guide’s general preference against uppercase labels. The city artwork is decorative and absent on mobile and in the reader. Text, controls, all data and headings remain accessible HTML. There is no fabricated news, cover, historical edition, page count, balance or minted supply.
+
+## Hosting result and naming limitation
+
+The worker ran `imd site publish dist --name the-imd-daily`. It exited **2** with:
+
+> refused: imd site publishes this contributor's own site, never a job's work. A job's website is hosted by the plane when the job completes: commit the source and the export in dist/ and submit. There is nothing to publish and nothing to ask an operator for.
+
+The requested HTTPS hostname returned HTTP 404 before delivery. This is not evidence of a label collision. **No naming-specific blocker was reported, but label assignment and actual hosted-site access are unverified.** The worker did not bypass the refusal or modify the existing site. The export is ready for the plane to host at the requested new URL.
+
+New-origin service checks below used the actual requested origin inside a browser, with the production static files fulfilled locally by Playwright. The VPS and chain responses were real. This establishes service access from that origin; it does not establish public deployment of the frontend. `IMD_HOSTED=1` in the live test script is available for the eventual actual URL check.
+
+## Production build, typecheck and unit checks
+
+Dependencies were installed outside the repository in a temporary build copy because existing manifests/lockfiles were protected. Source, public assets, manifest, lockfile and Vite/TypeScript configuration were compared byte for byte against the validated copy (49 files). No dependency or build configuration was changed. The completed export was copied back and obsolete output files removed.
+
+| Command | Actual result | Evidence |
 | --- | --- | --- |
-| Production build (`npm run build`, including `tsc --noEmit`) | Exit 0; 17 exported files, bundled worker and relative assets | [build.txt](checks/build.txt), [export-integrity.json](checks/export-integrity.json) |
-| Separate `npm run typecheck` | Exit 0 | [typecheck.txt](checks/typecheck.txt) |
-| Frontend `npm test` | 12/12 passed: integer arithmetic, exact expiry/deadline, closure latch, dates, search, metadata and paginated index recovery | [web-tests.txt](checks/web-tests.txt) |
-| Service `npm test`, with BusyBox tar selected for restore tests | 14/14 passed: existing nine service tests plus five restore regressions | [server-tests.txt](checks/server-tests.txt), [restore-busybox.txt](checks/restore-busybox.txt) |
-| `npm run check:abi` | Both canonical hashes match the deployment handoff | [abi-check.txt](checks/abi-check.txt) |
-| Official Caddy 2.10.2 `validate` | Exit 0 on the actual `server/Caddyfile`; `adapt` also retained upload limit and upstream | [caddy-validate.txt](checks/caddy-validate.txt) |
-| Production-export browser regressions | Passed in Chromium at 320/390/1440px, served under `/preview/`; no page runtime errors | [browser-results.json](checks/browser-results.json), [test source](../web/scripts/validate-revision.mjs) |
-| Pinned taste probe, offline | All 16 checks passed at 320/390/1440px, including render, layout, targets, contrast and share metadata | [taste.json](checks/taste.json) |
-| Shell/JavaScript syntax and whitespace | `sh -n server/restore.sh`, `node --check web/scripts/validate-revision.mjs`, `git diff --check`: exit 0 | Re-run directly from repository root |
+| `npm ci --prefix /tmp/imd-daily-build/web --cache /tmp/imd-npm-cache --no-audit --no-fund` | Passed using unchanged lockfile | Build copy only; no generated dependency directory in submission |
+| `npm run typecheck --prefix /tmp/imd-daily-build/web` | Exit 0 | `artifacts/checks/typecheck.txt` |
+| `npm test --prefix /tmp/imd-daily-build/web` | Exit 0; 16 tests in two files | `artifacts/checks/web-tests.txt` |
+| `npm run check:abi --prefix /tmp/imd-daily-build/web` | Exit 0; both pinned canonical hashes match | `artifacts/checks/abi-check.txt` |
+| `npm run build --prefix /tmp/imd-daily-build/web` | Exit 0; Vite 6.4.5, 5,305 modules; complete static export | `artifacts/checks/build.txt` |
+| `npm test --prefix /tmp/imd-daily-build/server` | Exit 0; 14 service/restore tests | `artifacts/checks/server-tests.txt` |
+| `git diff --check` | Passed after removing raw HTTP-header trailing whitespace | Final local check |
+| Protected-path diff and export inspection | Passed | `artifacts/checks/export-integrity.json` |
+| File and bundle budget | Under 8,388,608 bytes; exact final totals in report | `artifacts/checks/submission-budget.json` |
 
-Dependencies were installed in a temporary mirror with the existing manifests/lockfiles. The final application source and ABIs were copied unchanged into that mirror for the build and checks; its `dist/` was copied back byte for byte. The export hashes match the tested build. No dependency directories, package caches, binary tools, browser downloads or fixture PDFs are part of the submission.
+The build reports dependency PURE-annotation warnings and Vite public-asset warnings inside `image-set`. They do not fail the build. The emitted CSS was inspected: the URLs resolve relatively, no `__VITE_` placeholders remain, and both engines loaded all local assets. No source map, vendored npm registry, package archive, dependency/cache directory or submodule is required or included.
 
-The browser regression command was `IMD_PLAYWRIGHT=<external Playwright module> PLAYWRIGHT_BROWSERS_PATH=<external browsers> node web/scripts/validate-revision.mjs`. README gives repeatable installation commands. The probe command was `IMD_PLAYWRIGHT=<external Playwright module> PLAYWRIGHT_BROWSERS_PATH=<external browsers> node .imd/reads/skills/design-critic/scripts/taste.mjs --out test/scratch/taste --offline`.
+The 16 frontend tests cover integer-only amounts, strict quantities/dates, gas rounding, open-window bounds, mint deadline, closed-window latch, countdown, archive search, metadata cross-field validation, resumable indexing, saved service settings, failed authentication and committed-hash refusal. Service/restore tests use temporary local data.
 
-## Reproduction, fixes and rechecks
+## Live read-only integration checks
 
-Full finding IDs and answers are in [`.imd-responses.json`](../.imd-responses.json). The original public failures are recorded in [reproduced-public.json](checks/reproduced-public.json); publisher failures are in [reproduced-publisher.txt](checks/reproduced-publisher.txt).
+Run through `web/scripts/validate-live.mjs`, with Playwright installed outside the repository. The contributor RPC was supplied only to the test harness; the shipped RPC sources remain **https://ethereum-rpc.publicnode.com** and **https://eth.drpc.org**. The test adapter allowed only read-only RPC methods and never exposed a signing key.
 
-| Finding | Source and reproduced behavior | Correction and final check |
+Both **Chromium and WebKit passed all 17 live integration checks** on the final production export. Results are separate from fixtures in `artifacts/checks/reproduced-public.json`. The tests ran with reduced motion and the actual requested browser origin. The original cover and saved summary were loaded from the existing VPS.
+
+Observed live state during checks:
+
+- Issue count: **1**, latest issue ID **1**, actual minted supply **0**.
+- Price: **100000000000000000 base units = 0.1 IMD**.
+- Publication: **1792576715**; close: **1792663115**, exactly **86,400 seconds** later.
+- Edition was open at the time of testing; all values were read, not seeded into the frontend.
+- Existing collection and vault both had deployed bytecode; the collection’s publisher matched the pinned address.
+- All addresses/chain facts and ABI hashes matched the supplied deployment.
+
+| Live resource | Bytes fetched | Verified SHA-256 |
+| --- | ---: | --- |
+| Existing PDF | 23,259,417 | `0f66a502800b27215aaac11d1ec109919dbd5250637e8f7989b439ec33c5b86a` |
+| Existing cover | 4,558,217 | `38ce83557cce0fd6cc8991a61e97a82fadfee83ee12058949db0e5fe7c3895ed` |
+| Existing metadata | 1,079 | `bb0fc31b8057df4a67c8ad485d2b8f6a8f0b801c7772e5c7917f48a78f9df7d3` |
+
+The hashes matched the chain commitments byte for byte. The uploaded files were neither edited nor copied into generated news content.
+
+Both browser engines exercised:
+
+1. Real-cover loading, actual saved summary, and quantity plus/minus, integer totals and invalid quantity input.
+2. Optional recipient disclosure and address validation without sending a transaction.
+3. Wallet picker opening, inert page, keyboard focus trap, Escape and focus return.
+4. Responsive layout at 320, 390, 759, 900, 1100 and 1440px, with no document overflow.
+5. At 390×844, Read action bottom **645.55px**, fully on the first screen; header **110px**.
+6. Emulated iPhone/no-injected-provider picker: MetaMask, Coinbase and Phantom links preserve the page origin, and Coinbase Smart Wallet is available. No wallet app was opened.
+7. Archive title/date/summary search, matching and empty results, and a real thumbnail.
+8. Collection’s disconnected state, About, Vault readout, Publisher desk, and issue permalink.
+9. The real six-page PDF: lazy canvas rendering, next page, zoom/fit, fullscreen/window fallback and close back to its issue.
+10. Download event and the original 23,259,417 PDF bytes, with the downloaded hash again matching the commitment.
+11. Zero uncaught application runtime errors and zero missing local export resources.
+
+The WebKit browser initially lacked host libraries and then TLS modules. Temporary browser-only dependencies were installed outside the repository, and the entire live suite passed after repair. These earlier tool failures are not concealed as product failures or counted as passes. A Chromium run logged an aborted Coinbase metrics request on browser closure; it was not an application exception or required resource. One early direct public-RPC preview saw a fallback provider return HTTP 400 while the other provider loaded the issue successfully; the final controlled read-only transport checks passed.
+
+### Actual new-origin upload-service boundary
+
+Both engines checked real HTTPS access from `https://the-imd-daily.sites.imd.fun`:
+
+- `GET /health`: HTTP 200, `ok: true`, correct public file origin.
+- `POST /api/auth/challenge` for the pinned publisher: HTTP 200; the challenge includes the new browser origin.
+- A known non-publisher address: HTTP 403.
+- Unsigned verification: HTTP 400.
+- A separate actual POST preflight returned HTTP 204, with the exact new origin and Authorization, Content-Type and X-Content-SHA256 allowed.
+
+See `artifacts/checks/reproduced-publisher.txt` for the public response headers. No challenge signature, successful real publisher login, authenticated upload, draft/content write or publication was performed. The challenge nonce is transient authentication state. Successful publisher flows are covered by the isolated fixture suite below.
+
+A valid service origin already saved in the same origin’s browser storage still wins over `service.json`. Browser storage and wallet sessions are origin-scoped; the new hostname cannot import the old site’s storage automatically.
+
+## Mocked interaction checks
+
+`web/scripts/validate-revision.mjs` serves the production export under a local `/preview/` subpath, supplies explicitly named local fixtures and blocks external requests. **All wallet requests, transaction receipts, publications, balances and service writes in this suite are mocks.** It uses no real signer and broadcasts nothing.
+
+The final command completed with exit 0 in **Chromium and WebKit**, producing **46 result records**, with **no skipped/failed cases and no runtime errors**. Evidence: `artifacts/checks/browser-results.json`. This is a count of records, not a claim of 46 independent tests.
+
+Covered states and assertions:
+
+- Approval declined: exactly the displayed 0.2 IMD total is requested, collection is the spender, no ETH value is sent.
+- Mint declined after sufficient allowance: expected issue/quantity/recipient and a deadline strictly before the chain close.
+- ABI-encoded `MintClosed(issueId)` simulation refusal: descriptive error, zero wallet submissions.
+- Approval receipt reverted: error and no completed mint.
+- Approval pending: quantity/action disabled; after mocked block advancement, exact approval then mint and confirmed receipt link.
+- Insufficient IMD and wrong Ethereum network: mint unavailable with explanatory text.
+- Short-interval expiry: Closed appears, mint controls disappear, Read and Download remain.
+- Reader page navigation, left/right edges when zoomed, small final pages, keyboard action and synthetic pinch in both engines.
+- A 52,921,453-byte local raster PDF: four pages, range reads, original edge color retained, full download.
+- 320/390px vault accounting reflow.
+- Zero-issue state with navigation, RPC outage/retry on issue and reader routes.
+- Publisher preparation invalidation after edits, file/hash checks, explicit review, failed transaction, persisted recovery, receipt/index recovery and summary retry after reload.
+
+Synthetic touch events exercise the application handlers; they are not physical pinch or mobile-wallet tests.
+
+## Better Interface six-domain review
+
+The pinned workflow and the core principles of all six domains were read and applied while building. Representative source and rendered checks were consolidated here. Guidance attribution and licenses are in `DESIGN.md` and `docs/DESIGN-GUIDANCE-LICENSE.txt`.
+
+| Domain | Coverage and evidence | Unperformed/limited checks |
 | --- | --- | --- |
-| `34cc7a33` high: unreachable PDF edge | `web/src/styles.css:194`: at 200%, A3 pages began at −171px on 390px and −280px on 1440px, with `scrollLeft=0` | Start alignment plus per-page auto inline margins. Left edge is now 12px at both widths; right panning reaches 378/1428px, retaining 12px padding. [Mobile screenshot](browser/chromium-reader-390.png). |
-| `cfa7c3fd` high: vault overflow | `web/src/pages/VaultPage.tsx:44`: three-column table was 437px and document width 457px at both mobile widths | Removed implementation names, kept public labels/amounts, allowed cell wrapping. Also wrapped the full publisher-address link which remained 14px too wide at 320px after the table fix. Final document widths 320/390px; tables 280/349.53px. [320px screenshot](browser/chromium-vault-320.png). |
-| `73a309e5` high: invalid Caddy config | `server/Caddyfile:3`: official 2.10.2 rejected `not` as a response matcher in `encode` | Removed encoding. Actual config validates; immutable file/range responses remain unchanged. VPS guide adds exact validation before startup. |
-| `868508a3` high: false restore success | `server/restore.sh:6`: BusyBox 1.37 rejected `--skip-old-files`; the trailing echo masked failure | Supported `-k`, `set -eu` inside the container, nonzero hash mismatch and success only after every hash check. Five tests passed using actual BusyBox tar through a local Docker-command shim. Existing files are preserved and their extraction refusal is nonzero. Guide specifies an empty restore volume and failure handling. |
-| `7ae68a17` medium: RPC failure described as absence | `web/src/pages/IssuePage.tsx:11`, `web/src/pages/ReadPage.tsx:11`: both 503 RPC fixtures produced “No issue 1 on chain” | Error branch precedes absence inference; announced error and Retry. Restoring RPC fixture responses and clicking Retry opens the issue and reader. |
-| `5ca92f94` medium: Next stalls at zoom | `web/src/components/Reader.tsx:56`: three Next clicks at 200% left the page field at 1 after the first scroll | Direct navigation state, vertical-only scrolling and nearest-page-top tracking. Next reaches 2,3,4 at 200% and fit width on mobile/desktop, and 50% on mobile. Previous, direct entry, manual scrolling and Space-key activation passed. [Visible keyboard focus](browser/reader-keyboard-focus.png). |
-| `7e70bf2a` medium: stale prepared metadata | `web/src/pages/Publisher.tsx:195`, `:306`, `:332`: displayed B but decoded transaction and saved summary remained A | Each PDF/title/date/summary edit clears preparation and confirmation. Async preparation/publication locks fields. Final confirmation displays exact prepared title/date/summary. Independent title/date/summary edits each required preparation again; final decoded fixture request matched title B, 2026-10-20 and summary B. [Confirmation](browser/publisher-confirmation.png). |
-| `64b8174e` medium: lost summary finalization | `web/src/pages/Publisher.tsx:105`, `:257`: recovery cleared storage before authentication; zero summary-update calls | Durable confirmed id/hash/service origin, authenticated finalization shared by normal and recovered publication, visible retry, no premature record removal. Passed indexed-issue, receipt-only and missing-hash recovery; service failures across reload; retry and summary search. The normal confirmation/reload test submitted one local fixture transaction. [Failure and retry state](browser/publisher-recovery-failure.png). |
+| Accessibility | Checked native buttons/links, field labels, headings/landmarks, skip link, visible keyboard focus, modal trap/return, state text and reduced motion; browser snapshots and keyboard interactions | No screen-reader session or physical-device testing; no claim of full WCAG conformance |
+| Layout | Checked hierarchy, shared gutters, opaque text surfaces, 320–1440px reflow, mobile first-screen action, disclosed recipient, real-cover proportions and scroll shelf | Native browser 200% zoom and RTL mirror not performed; product is English-only |
+| Writing | Checked labels, price/gas distinction, recovery/error copy, truthful loading/empty/closed states, actual-only archive/summary | Real wallet-specific rejection wording can vary by provider |
+| Typography | Checked loaded local brand/UI/editorial fonts, six-size scale, three families/weights, wrapping, hashes and tabular changing values | Other operating-system font rasterization not inspected |
+| Colors | Checked actual computed opaque foreground/background pairs; probe passed text contrast; primary and muted text remain off busy scenery | Decorative scenery is not a text contrast reference; no claim about untested external wallet UI |
+| UI | Checked restrained rectangular surfaces, paper-only depth, large primary controls, focus/hover/disabled/pending states, reduced-motion output, reader without scenery | No native handset fullscreen, passkey, wallet-app launch or hardware touch test |
 
-## Meaningful interaction coverage
+Measured foreground/background contrast: primary/page **17.18:1**; secondary/page **9.56:1**; cyan/page **10.21:1**; primary/panel **16.10:1**; secondary/panel **8.96:1**; action text/green **11.79:1**; green/page **12.91:1**. The reduced-motion browser check reported no active animations and zero nonzero control transition durations.
 
-- **Reader:** four A3 pages, 200% and fit navigation at 390×844 and 1440×844, both horizontal edges, manual vertical scrolling, Previous, page-field Enter and Next by Space. At 50%, explicit navigation still reaches the final short page. Synthetic two-touch events changed zoom to 150% and retained the left edge; this is not a physical pinch test.
-- **Large raster PDF:** generated only during testing, 52,921,453 bytes, four A3 portrait pages. Two HTTP byte-range requests were observed. At 200%, navigation reached pages 2/3/4, the sampled source red edge remained `[255,0,0,255]`, and the downloaded file had the complete original byte length. [Reader screenshot](browser/large-raster-reader.png). The generated PDF is not committed or presented as news.
-- **Vault:** collected 0.3, withdrawn 0.1, balance 10,000 IMD local read-only fixtures; table, donation amount and full recipient remained readable at 320/390px with no document overflow.
-- **Archive:** an empty chain displays its existing honest empty state; About navigation works. A recovered summary becomes searchable after the service acknowledges publication. [Empty first screen at 390px](browser/front-empty-390.png).
-- **Publisher:** mock EIP-6963/browser wallet, challenge API and read-only RPC; PDF preparation hashes and refetches the actual locally generated PDF, cover and metadata. Changed data invalidates preparation. Decoded simulation/wallet requests use the actual ABI. A rejected request sends nothing; a successful fixture request confirms locally. Summary-service errors remain visible and recover after reload/authentication/retry without a second submission.
-- **Server:** existing challenge/signature, wrong-origin/signer, replay, unauthorized and oversized upload, hash mismatch, ranges, traversal and summary sanitizing tests still pass. Restore tests execute the exact script's container command with filesystem paths mapped to temporary directories; the BusyBox tar executable is real, the Docker shim is a test fixture.
+### Findings fixed and rechecked
 
-All browser chain data and confirmations are explicitly local fixtures. External requests are blocked by the harness. No real wallet signed, no funds moved, and no real issue was uploaded or published.
+| Severity | Source | Finding and correction | Recheck |
+| --- | --- | --- | --- |
+| Medium | `web/src/wallet/ConnectSheet.tsx:27` | Modal claimed modal behavior but the page remained keyboard-reachable. Portalled the dialog outside the inert root, trapped Tab and restored the trigger on close. | Both live engines; mocked named-provider connection |
+| Medium | `web/src/components/DownloadLink.tsx:9` | Cross-origin download attributes alone do not reliably save a file. Added original-byte Blob download with pending/error fallback, retaining a real href. | Both engines emitted download events; real PDF and large fixture hashes/bytes verified |
+| Medium | `web/src/pages/FrontPage.tsx:36` | The earlier home archive was hidden when only one issue existed. Show the actual current issue in the archive and keep the saved summary below the lead. No historical entries invented. | Live one-issue state and archive searches |
+| Low | `web/src/styles.css:145` | Probe found a fourth weight from 500. Consolidated UI emphasis to 600; kept brand 700 and body 400. | Final probe: three weights/families and six sizes |
+| Low | `web/src/pages/FrontPage.tsx:39` | Archive copy repeated the two-beat slogan pattern. Replaced it with one plain sentence. | Slogan/repetition checks pass |
+| Low | `web/src/styles.css:148` | Mint action combined border and glow. Removed its border and retained the restrained green shadow. | Chrome check passes |
+| Low | `web/src/styles.css:58` | Increased brand/wallet hit areas to at least 44px while retaining compact mobile header. | Final 390px Read action remains on-screen; target check passes |
 
-## Better Interface review
+### taste@1 probe
 
-Reviewed the pinned workflow and core principles in all six domains while preserving the accepted newspaper system. This revision keeps the source's black/ivory frame, serif hierarchy, burgundy primary action, six-size scale, square controls and compact newspaper columns. Changes to the final component behavior are documented in root [DESIGN.md](../DESIGN.md).
+Ran from repository root:
 
-| Domain | Coverage and applicable result | Limits |
-| --- | --- | --- |
-| Accessibility | Checked affected native buttons/inputs, names, labels, error announcements and disabled states. Enter/Space reader actions passed; the focused Next button has a visible light outline on the dark toolbar. Retry is keyboard-operable through native buttons. | No screen reader or physical-device session; no claim of full accessibility conformance. |
-| Layout | Checked actual production export at 320/390/1440px, reader scroll geometry, mobile table/address reflow, publisher confirmation at 1440px and recovery at 390px. Fixed the reproduced geometry causes; preserved established grids and breaks. Product/empty-state action is visible on the 390px first screen. | No exhaustive route/viewport matrix or browser-native 200% page zoom. PDF 200% reading zoom was tested separately. |
-| Writing | Checked unknown/error/empty distinction, recovery instructions, confirmation data and action labels. RPC failures no longer assert absence; summary errors distinguish confirmed publication from pending service work. | No unrelated copy rewrite. |
-| Typography | Checked unchanged semantic size tokens, bundled display/body faces, tabular numbers and complete wrapping of monetary values/address. No critical value is clipped or ellipsized by these fixes. | No manual font-fallback or text-resize matrix. |
-| Colors | No palette changes. Pinned probe passed computed solid-background contrast at all three widths. Status words supplement color; reader retains original PDF colors in sampled fixture pixels. | No individual contrast ratios or image-wide color fidelity claim; no physical display measurement. |
-| UI | Checked existing button/form states, in-flight field locking, prepared confirmation invalidation, error/retry, recovered success and lazy PDF rendering. No new visual system or animated treatment. | No slow-motion animation-panel review; existing short color transitions are unchanged and the reduced-motion probe passed. |
+```sh
+IMD_PLAYWRIGHT=/tmp/imd-browser/node_modules/playwright/index.mjs PLAYWRIGHT_BROWSERS_PATH=/tmp/imd-browsers node .imd/reads/skills/design-critic/scripts/taste.mjs --out test/scratch/taste
+```
 
-All 16 taste checks passed. Screenshots beginning `390`, `320` or `1440` under `browser/` come from that probe; named fixture screenshots come from the regression harness. Every fixture screenshot is validation evidence, not a published newspaper edition.
+The final result is **14/16 categories passed**, recorded in `artifacts/checks/taste.json`. Render, layout, targets, contrast, tracking, type sizes/families/weights, glyphs, slogans, repetition, copy budget, chrome, motion and share metadata passed.
 
-## Delivery and remaining limits
+The two flags are deliberate brief overrides at `web/src/styles.css:101` and `web/src/pages/FrontPage.tsx:73`: **“small cyan INDEPENDENT COMMUNITY PRESS label”** explicitly requests uppercase and its position above the headline. The label has restrained tracking and passed contrast. It is hidden with the decorative intro below 760px. These are not concealed as passes or removed against the brief.
 
-Complete for the eight reported defects under the local validation above. **WebKit was attempted but could not launch** because required host libraries were missing; it is recorded as skipped, not passed. Chromium runtime checks completed without page errors. No physical iPhone/Android test or browser-native pinch was performed.
+## Evidence and completion limits
 
-Docker is unavailable in this environment, so full Docker Compose startup, live DNS, TLS issuance and VPS deployment were not exercised. The actual Caddy configuration validates with official Caddy 2.10.2, and the exact restore shell command passes the stated BusyBox tests. Those results do not claim that a backend was deployed. The publisher must install/configure the service as described in [VPS_SETUP.md](../docs/VPS_SETUP.md).
+Main screenshots show live issue content on the final export: `artifacts/browser/1440.png` and `390.png` (WebKit, optimized PNG evidence). The remaining named browser screenshots are updated, explicitly mocked regression states. Original production artwork is in `web/public/art/` and `dist/art/`; screenshot color quantization does not alter runtime artwork.
 
-The static export is delivered alongside its source. IMD still assigns/publishes the HTTPS URL and the submission commit; neither has been invented here. No UNLOCK site, contract, build/dependency file or protected directory was changed. Existing cache exclusions remain; root `.gitignore` adds exact-path exceptions for the required response/evidence files because repository-local exclusions otherwise hide them. Its explicit path budgets are: response JSON 16 KiB, validation Markdown 32 KiB, enumerated check reports combined 128 KiB, and enumerated screenshots combined 1 MiB. No directory-wide allowlist admits generated dependencies or caches. The complete prospective submission is checked against 8 MiB in [submission-budget.json](checks/submission-budget.json).
-
-Design guidance attribution: Jakub Krehel, Better Interface, MIT, pinned commit `267330e1adfc66a718fb65fa6918c1f06d0a689e`; documentation method: Paul Bakaus, Impeccable, Apache-2.0, pinned commit `9d715cc4f5564a990ca8345abfdd5df6dc9b41c8`. The guides were used as design references, not copied into the product.
+Local implementation, production build, typecheck, required assets, responsive checks and useful interactions are complete. **Public hosting/new-URL verification and a delivery commit remain pending the plane.** Real purchases/publication, a real authorized publisher session, physical wallets, screen readers and native-device behavior were intentionally not claimed. No requester input is missing, so no `.imd-blocked.json` was created.

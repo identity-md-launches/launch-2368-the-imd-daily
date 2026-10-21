@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "@fontsource/playfair-display/latin-900.css";
 import "@fontsource/source-serif-4/latin-400.css";
 import "@fontsource/source-serif-4/latin-600.css";
 import "./styles.css";

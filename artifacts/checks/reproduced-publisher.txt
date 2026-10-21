@@ -1,33 +1,18 @@
-launched chromium before publisher
-publisher navigate
-publisher connect
-wallet buttons Connect a wallet
-×
-Local fixture wallet
-Coinbase Wallet
+LIVE service check, requested browser origin: https://the-imd-daily.sites.imd.fun
+Service: https://the-imd-daily.duckdns.org
+Health: 200, ok true
+Publisher challenge: 200, challenge binds the requested origin
+Non-publisher challenge: 403
+Unsigned verification: 400
+No real signature, upload, draft save or publication was performed.
 
-Reading and downloads never need a wallet. Connect only to collect a copy.
-wallet buttons Connect a wallet
-×
-Local fixture wallet
-Coinbase Wallet
-
-Reading and downloads never need a wallet. Connect only to collect a copy.
-[
-  {
-    "test": "prepared-edit",
-    "invalidated": false,
-    "sent": {
-      "title": "Title A before upload",
-      "editorialDate": "1792540800"
-    },
-    "summary": "Summary A"
-  },
-  {
-    "test": "recovery",
-    "beforeAuth": false,
-    "markCalls": [],
-    "pending": null,
-    "summaryPublished": false
-  }
-]
+POST preflight captured by curl:
+HTTP/2 204
+access-control-allow-headers: Authorization, Content-Type, X-Content-SHA256
+access-control-allow-methods: GET, POST, OPTIONS
+access-control-allow-origin: https://the-imd-daily.sites.imd.fun
+access-control-max-age: 600
+alt-svc: h3=":443"; ma=2592000
+date: Wed, 21 Oct 2026 10:16:51 GMT
+vary: Origin
+via: 1.1 Caddy

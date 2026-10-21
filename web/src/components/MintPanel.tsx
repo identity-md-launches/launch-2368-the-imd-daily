@@ -4,11 +4,12 @@ import { isAddress, type Address, type Hex } from "viem";
 import { CHAIN_ID, CHAIN_NAME, DAILY, IMD, dailyAbi, tokenAbi, txUrl } from "../config";
 import { publicClient, chainNow, syncChainTime } from "../lib/chain";
 import { describeError } from "../lib/errors";
-import { countdown, formatETH, formatIMD, parseQuantity, plural } from "../lib/format";
+import { countdown, dateTime, formatETH, formatIMD, MAX_QUANTITY, parseQuantity, plural } from "../lib/format";
 import { latchClosed, mintDeadline, windowState } from "../lib/mint";
 import type { Issue } from "../lib/issues";
 import { useData, useTick } from "../lib/store";
 import { ConnectSheet } from "../wallet/ConnectSheet";
+import { Artwork } from "./Artwork";
 
 type Step =
   | { kind: "idle" }
@@ -72,7 +73,7 @@ export function MintPanel({ issue }: { issue: Issue }) {
   }, [address, total, allowance, state, wrongChain, issue.id]);
 
   async function collect() {
-    if (!wallet || !address || quantity === null || total === null || !to) return;
+    if (!wallet || !address || quantity === null || total === null || !to || state !== "open" || wrongChain || !recipientOk) return;
     let hash: Hex | undefined;
     try {
       setStep({ kind: "busy", text: "Checking the edition and your IMD balance…" });
@@ -110,52 +111,60 @@ export function MintPanel({ issue }: { issue: Issue }) {
 
   return (
     <section className="mint" aria-labelledby={`mint-${issue.id}`}>
-      <h3 id={`mint-${issue.id}`} className="h-sub">Collect this edition</h3>
-      <p className="mint-status num">
-        {state === "open" && <><strong className="accent">Open</strong> · closes in {countdown(closesIn)}</>}
-        {state === "closed" && <><strong>Closed</strong> · the 24-hour window ended</>}
-        {state === "upcoming" && <>Opens at publication</>}
-        {" · "}{plural(issue.supply, "copy", "copies")} collected
-      </p>
-      {state === "open" ? (
-        <>
-          <p className="mint-price num">{formatIMD(issue.price)} IMD per copy. No copy limit per wallet; buy again any time before close.</p>
-          <div className="mint-form">
-            <label htmlFor={`qty-${issue.id}`}>Copies</label>
+      <div className="collector-heading">
+        <div><p className="collector-kicker">Support the independent press</p><h3 id={`mint-${issue.id}`} className="h-sub">Collect this edition</h3></div>
+        <Artwork name="emblem" className="collector-stamp" />
+      </div>
+      <p className="edition-label"><span className={`status-dot ${state === "open" ? "is-open" : ""}`} />24-hour open edition</p>
+      <div className="collector-price num"><strong>{formatIMD(issue.price)} <span>IMD</span></strong><span className="fine">per copy</span></div>
+      <div className="window-clock num">
+        <span className="fine">{state === "open" ? "Collecting closes in" : state === "closed" ? "Collecting has ended" : "Opens at publication"}</span>
+        <strong className={state === "open" ? "accent" : ""}>{state === "open" ? countdown(closesIn) : state === "closed" ? "Closed" : "Upcoming"}</strong>
+        <time className="fine" dateTime={new Date(Number(issue.closesAt) * 1000).toISOString()}>Closes {dateTime(issue.closesAt)}</time>
+      </div>
+      {state === "open" ? <>
+        <div className="mint-form">
+          <label htmlFor={`qty-${issue.id}`}>Quantity</label>
+          <div className="quantity-stepper">
+            <button className="stepper-btn" aria-label="Decrease quantity" disabled={busy || quantity === null || quantity <= 1n}
+              onClick={() => setQtyText(String(quantity! - 1n))}>−</button>
             <input id={`qty-${issue.id}`} className="qty num" inputMode="numeric" autoComplete="off" value={qtyText}
               aria-invalid={quantity === null} aria-describedby={`qty-help-${issue.id}`}
-              onChange={(e) => setQtyText(e.target.value.replace(/\D/g, "").slice(0, 6))} disabled={busy} />
-            <span id={`qty-help-${issue.id}`} className="num total">
-              {total !== null ? <>Total <strong>{formatIMD(total)} IMD</strong></> : "Enter 1 to 10,000 copies"}
-            </span>
+              onChange={e => setQtyText(e.target.value.replace(/\D/g, "").slice(0, 6))} disabled={busy} />
+            <button className="stepper-btn" aria-label="Increase quantity" disabled={busy || quantity === null || quantity >= MAX_QUANTITY}
+              onClick={() => setQtyText(String(quantity! + 1n))}>+</button>
           </div>
-          <p className="fine num">
-            Gas is paid separately in ETH{gas !== null ? `: about ${formatETH(gas)} ETH` : ""}. No ETH goes to the newspaper.
-            {balance !== null && <> Your balance: {formatIMD(balance)} IMD.</>}
-            {allowance !== null && total !== null && allowance < total && <> An exact approval of {formatIMD(total)} IMD comes first.</>}
-          </p>
-          <label className="check"><input type="checkbox" checked={gift} onChange={(e) => setGift(e.target.checked)} disabled={busy} /> Send to another address</label>
-          {gift && (
-            <input className="field" aria-label="Recipient address" placeholder="0x…" spellCheck={false} value={recipient}
-              aria-invalid={!recipientOk} onChange={(e) => setRecipient(e.target.value)} disabled={busy} />
+        </div>
+        <p id={`qty-help-${issue.id}`} className="collector-total num">
+          {total !== null ? <><span>Total</span><strong>{formatIMD(total)} IMD</strong></> : <span className="err">Enter 1 to 10,000 copies per transaction.</span>}
+        </p>
+        <div className="mint-actions">
+          {!isConnected || wrongChain ? <ConnectSheet label="Connect to collect" /> : (
+            <button className="btn btn-primary" disabled={busy || quantity === null || !recipientOk || (balance !== null && total !== null && balance < total)} onClick={collect}>
+              {busy ? "Working…" : `Collect ${quantity !== null ? plural(quantity, "copy", "copies") : ""}`}<span aria-hidden="true">↗</span>
+            </button>
           )}
-          <div className="mint-actions">
-            {!isConnected ? <ConnectSheet /> : wrongChain ? <ConnectSheet /> : (
-              <button className="btn btn-primary" disabled={busy || quantity === null || !recipientOk || (balance !== null && total !== null && balance < total)} onClick={collect}>
-                {busy ? "Working…" : `Collect ${quantity !== null ? plural(quantity, "copy", "copies") : ""}`}
-              </button>
-            )}
-            {wrongChain && <span className="note">Collecting needs {CHAIN_NAME}.</span>}
-            {balance !== null && total !== null && balance < total && <span className="note">This wallet holds too little IMD for the total.</span>}
-          </div>
-        </>
-      ) : null}
+          {wrongChain && <span className="note">Collecting needs {CHAIN_NAME}.</span>}
+          {balance !== null && total !== null && balance < total && <span className="note">This wallet holds too little IMD for the total.</span>}
+        </div>
+        <p className="gas-note fine num">ETH is only for gas{gas !== null ? `: about ${formatETH(gas)} ETH` : ""}.
+          {balance !== null && <> Balance: {formatIMD(balance)} IMD.</>}
+          {allowance !== null && total !== null && allowance < total && <> Exact approval: {formatIMD(total)} IMD.</>}
+        </p>
+        <details className="recipient-options">
+          <summary>Send to another address</summary>
+          <label className="check"><input type="checkbox" checked={gift} onChange={e => setGift(e.target.checked)} disabled={busy} />Choose a recipient</label>
+          {gift && <><label htmlFor={`recipient-${issue.id}`}>Recipient address</label><input id={`recipient-${issue.id}`} className="field" placeholder="0x…" spellCheck={false} autoComplete="off" value={recipient}
+            aria-invalid={!recipientOk} onChange={e => setRecipient(e.target.value)} disabled={busy} /></>}
+        </details>
+      </> : <p className="fine closed-note">This edition stays free to read and download.</p>}
       <div role="status" aria-live="polite" className="mint-step">
         {step.kind === "busy" && <p>{step.text} {step.hash && <a href={txUrl(step.hash)} target="_blank" rel="noopener">View on Etherscan</a>}</p>}
         {step.kind === "done" && <p className="ok">Confirmed: {plural(step.quantity, "copy", "copies")} collected. <a href={txUrl(step.hash)} target="_blank" rel="noopener">Receipt on Etherscan</a></p>}
         {step.kind === "error" && <p className="err">{step.text} {step.hash && <a href={txUrl(step.hash)} target="_blank" rel="noopener">Transaction on Etherscan</a>}</p>}
       </div>
-      <p className="fine">A copy is a collectible that supports the paper. It carries no copyright and no promise of any return.</p>
+      <div className="collector-foot"><p className="num"><strong>{issue.supply.toString()}</strong> {issue.supply === 1n ? "copy" : "copies"} minted <span>· Uncapped edition</span></p>
+        <p className="fine">A collectible to support the paper. No copyright or promise of return.</p></div>
     </section>
   );
 }

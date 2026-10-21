@@ -43,7 +43,7 @@ export const tokenUrl = (id: bigint) => `${EXPLORER}/nft/${DAILY}/${id.toString(
 
 /**
  * The publishing service runs on the publisher's own server. Its origin is not baked into
- * the build: the dashboard reads ./service.json (shipped empty) and lets the publisher store an
+ * the build: the dashboard reads ./service.json (the existing VPS) and lets the publisher store an
  * origin in this browser, so a server move never needs a site rebuild.
  */
 export const SERVICE_STORAGE_KEY = "imd-daily:service-origin";

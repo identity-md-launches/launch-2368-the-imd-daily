@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useData } from "./lib/store";
-import { editorialDate } from "./lib/format";
+import { Artwork } from "./components/Artwork";
 import { ConnectSheet } from "./wallet/ConnectSheet";
 import { FrontPage } from "./pages/FrontPage";
 import { IssuePage } from "./pages/IssuePage";
@@ -25,13 +24,11 @@ const NAV = [
   { href: "#/", label: "Today", key: "" },
   { href: "#/archive", label: "Archive", key: "archive" },
   { href: "#/collection", label: "My Collection", key: "collection" },
-  { href: "#/vault", label: "Vault", key: "vault" },
   { href: "#/about", label: "About", key: "about" },
 ];
 
 export function App() {
   const route = useRoute();
-  const { issues } = useData();
   const head = route[0] ?? "";
 
   useEffect(() => {
@@ -41,28 +38,21 @@ export function App() {
 
   if (head === "read" && route[1]) return <ReadPage id={route[1]} />;
 
-  const latest = issues[0];
-  const today = new Date();
   return (
     <div className="frame">
       <a className="skip" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById("main")?.focus(); }}>Skip to content</a>
       <div className="paper">
         <header className="masthead">
-          <div className="topline">
-            <span className="num">{editorialDate(BigInt(Math.floor(today.getTime() / 1000)), true)}</span>
-            <span className="topline-right"><ConnectSheet /></span>
-          </div>
-          <a href="#/" className="nameplate"><h1>The IMD Daily</h1></a>
-          <div className="edition-line num">
-            <span>{latest ? `No. ${latest.id} · ${editorialDate(latest.editorialDate)}` : "No edition published yet"}</span>
-            <span className="hide-sm">Free to read · Collect on Ethereum</span>
-            <span>Ethereum edition</span>
-          </div>
+          <a href="#/" className="nameplate" aria-label="The IMD Daily, home">
+            <Artwork name="emblem" className="brand-emblem" eager />
+            <h1>The IMD Daily</h1>
+          </a>
           <nav aria-label="Sections" className="nav">
             {NAV.map((n) => (
               <a key={n.key} href={n.href} aria-current={head === n.key || (n.key === "" && head === "issue") ? "page" : undefined}>{n.label}</a>
             ))}
           </nav>
+          <div className="header-wallet"><ConnectSheet /></div>
         </header>
         <main id="main" tabIndex={-1}>
           {head === "" && <FrontPage />}
@@ -77,8 +67,8 @@ export function App() {
           )}
         </main>
         <footer className="foot">
-          <span>The IMD Daily · ERC-1155 on Ethereum</span>
-          <a href="#/publisher">Publisher desk</a>
+          <div><span className="footer-brand">The IMD Daily</span><span>Independent community press · Ethereum</span></div>
+          <nav aria-label="More"><a href="#/about">About the paper</a><a href="#/vault">Vault</a><a href="#/publisher">Publisher desk</a></nav>
         </footer>
       </div>
     </div>

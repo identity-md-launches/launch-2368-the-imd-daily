@@ -2,20 +2,20 @@
 > imd-daily-files@1.0.0 test
 > node --test test/*.test.mjs
 
-✔ health answers (67.231296ms)
-✔ challenge refused for non-publisher address and foreign origin (20.152913ms)
-✔ signature from another wallet is refused (23.131797ms)
-✔ publisher signs in; challenge cannot be replayed (24.370085ms)
-✔ altered or expired challenge is refused (12.847056ms)
-✔ uploads need a publisher session; PDFs are validated, stored by hash and served with ranges (54.164314ms)
-✔ oversized PDF is refused (145.354625ms)
-✔ path traversal and non-hash names are not served (6.198753ms)
-✔ summaries are sanitized and public only after publication (20.243108ms)
-✔ restore preserves object paths, bytes and draft metadata before reporting success (59.620215ms)
-✔ a hash mismatch fails and never prints success (75.779558ms)
-✔ a corrupt archive propagates extraction failure (53.034276ms)
-✔ existing files are never overwritten and tar refusal is reported as failure (62.420363ms)
-✔ a missing archive is refused (3.706944ms)
+✔ health answers (37.632499ms)
+✔ challenge refused for non-publisher address and foreign origin (11.902511ms)
+✔ signature from another wallet is refused (16.871025ms)
+✔ publisher signs in; challenge cannot be replayed (14.558726ms)
+✔ altered or expired challenge is refused (7.028196ms)
+✔ uploads need a publisher session; PDFs are validated, stored by hash and served with ranges (41.355867ms)
+✔ oversized PDF is refused (212.786203ms)
+✔ path traversal and non-hash names are not served (6.312041ms)
+✔ summaries are sanitized and public only after publication (18.904486ms)
+✔ restore preserves object paths, bytes and draft metadata before reporting success (77.914384ms)
+✔ a hash mismatch fails and never prints success (72.663044ms)
+✔ a corrupt archive propagates extraction failure (56.185599ms)
+✔ existing files are never overwritten and tar refusal is reported as failure (58.481553ms)
+✔ a missing archive is refused (3.868225ms)
 ℹ tests 14
 ℹ suites 0
 ℹ pass 14
@@ -23,4 +23,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 886.611274
+ℹ duration_ms 790.658172

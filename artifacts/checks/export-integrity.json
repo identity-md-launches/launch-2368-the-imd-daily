@@ -1,34 +1,144 @@
 {
-  "sourceHeadBeforeRevision": "a5bf9db5921da5c24110791489b3326ca3116de5",
-  "sourceHashes": {
-    "web/src/components/Reader.tsx": "210d31b204a832714a3d14b858f7b7a8b954f83b662f8e0ee89012aac5632cdc",
-    "web/src/pages/VaultPage.tsx": "4310b7751abbbba43b195833e3b86c857e2281d98d603d440af707c2d29ab0ad",
-    "web/src/pages/IssuePage.tsx": "e6431668ff33a9135327038a1738c2c718149e0d03f35e35c442a25737290561",
-    "web/src/pages/ReadPage.tsx": "ca028593e19c2ccf693c524698af06e2b3d44ebf29e189135735fc5dde4ce68a",
-    "web/src/pages/Publisher.tsx": "4478a7914ba625c4e4094071d6f9e14a969e208987cca7bdc3c7e4e666af6d11",
-    "web/src/styles.css": "10de5de49fa5191589d4f490252fc66990e143dab6e7d340ddee89a59bbd288a",
-    "server/Caddyfile": "be8db34055fd83bfcbaf0848e97c152908aabeba24c2b726b1b590dfad654243",
-    "server/restore.sh": "2eee2faa97ad6f22e69f6247b6ac6d8f71ffda61c08bd792dace952f59a268a2"
-  },
-  "exportHashes": {
-    "favicon.svg": "13aa3d18188a4c07ba1bb666a02a687d899442cf970338c11343e3236f25caef",
-    "service.json": "c049bd74b66f1c3d671f7272a1befed487c86e513babd993682ba70879e3b7fd",
-    "index.html": "e66e3358ade12ade1f34eb04548d1b31057ae632a1cb7949027988fbba7ba64c",
-    "og.png": "02d14acafcdf97631c9c12e1da6df1a230163cbb921cfed80f2c27c2cd14ec72",
-    "assets/source-serif-4-latin-400-normal-DJ5YJwmz.woff2": "02194deb92d3975dd30e11a3824a1f1db32b48c93654e60560cb81ce8e7b5f95",
-    "assets/playfair-display-latin-900-normal-oSb7_CWx.woff2": "2772c56b28bec10f310634732b0554dd6cced8ad0f723bbdf73f6abc53829ad0",
-    "assets/index-CGZNVqtS.js": "5140b0ac6f128767714c40f387be67ae6a05773306ca417b6d76894e711a28b9",
-    "assets/playfair-display-latin-900-normal-DypQvTWf.woff": "edf03b449abed72765d03468112a7e4f742fa407ee058226b21acf9d2c588f60",
-    "assets/source-serif-4-latin-600-normal-DeJomR3S.woff": "cf44d31e38a498c19087148703da185058bd9ae1ab09e05d6327507479e2eb88",
-    "assets/pdf.worker.min-yatZIOMy.mjs": "1baa1844c89c80a5b2797c916e75ab29254be46d8e9cb53cb6364d7aad84be36",
-    "assets/source-serif-4-latin-400-normal-C1O10bxN.woff": "d9e83df242381ae1ecab8238bb865a25b1e9ebe01fe1505a032f12cda6154857",
-    "assets/ccip-DmOfX8rC.js": "19d1f4f2512cca9d65258ddceabff45e1aaed1371c444660e860d0957d76d0e8",
-    "assets/index-BanSrxaK.js": "f2dfc3bbee218c384f53a58223376109d6db7fc370e0372a228edc3d1e01c3ef",
-    "assets/index-CrBNqaYO.css": "ab3028f3e63cb909895167128051bc392936513393bb5d8bcd1c7f68ca5af123",
-    "assets/index-BHzUuMrw.js": "557d65d503e667d273a0ed8db3828529431fa5624aed8a0425497af619f7e059",
-    "assets/hooks.module-DE9oX6xH.js": "18290b66f5736ddfcd375526f88fd55c2ecf072d6feee11d3554a78df4a3594f",
-    "assets/source-serif-4-latin-600-normal-DouSKlru.woff2": "f2b7e1cf1d277b7608231868135648f8ad8e2b58d8e97ca088bee15dc357bee7"
-  },
-  "exportMatchesTestedBuild": true,
-  "exportBytes": 3320938
+  "passed": true,
+  "errors": [],
+  "htmlRelativeReferences": [
+    "./art/newsroom.jpg",
+    "./favicon.png",
+    "./assets/index-03V2tbac.js",
+    "./assets/index-DYXFdy2F.css"
+  ],
+  "allPublicAssetsMatchSource": true,
+  "unresolvedVitePlaceholders": false,
+  "protectedFilesUnchanged": true,
+  "submodules": [],
+  "exportFileCount": 25,
+  "exportBytes": 4192228,
+  "indexSha256": "3daffe80fbb1d9b1b797f538aadf6b1953b234ad50dc22250e62076a77a87df0",
+  "assets": [
+    {
+      "path": "dist/art/emblem.png",
+      "bytes": 42453,
+      "sha256": "4fa007d7099639191af2ebf3cb3cc5e409ac17cc33f9602a25251d8bc081e770"
+    },
+    {
+      "path": "dist/art/emblem.webp",
+      "bytes": 10804,
+      "sha256": "8a8d76f0247bb841141205db37818ed2740ac53edb61969f1e69c2c23ae1c8e1"
+    },
+    {
+      "path": "dist/art/newsroom.jpg",
+      "bytes": 286834,
+      "sha256": "4b05fb1dab16a5ac10a2d90f8c74bb9c95fc6e7b8d67c18b7d1e59b3ee6caa8a"
+    },
+    {
+      "path": "dist/art/newsroom.webp",
+      "bytes": 232428,
+      "sha256": "d71b2129183e0e5073a8eae9c51ac551513bebb8309cb0ec5acf6b853ec19f9b"
+    },
+    {
+      "path": "dist/art/reporter.png",
+      "bytes": 150368,
+      "sha256": "7f328ef28a91b63a09328a218ed20a2d488158234b70aaa3f36ce6888ff78fcf"
+    },
+    {
+      "path": "dist/art/reporter.webp",
+      "bytes": 167954,
+      "sha256": "8f2b50c68524a0f85948a482e506323d9cccfffc44698ea04a6d657c240c0713"
+    },
+    {
+      "path": "dist/assets/ccip-D5zzGQty.js",
+      "bytes": 3051,
+      "sha256": "3a37773bcd07df50b527623d6e898e092e22a6163476b26272db9b9ca5aaf49f"
+    },
+    {
+      "path": "dist/assets/hooks.module-DE9oX6xH.js",
+      "bytes": 15835,
+      "sha256": "18290b66f5736ddfcd375526f88fd55c2ecf072d6feee11d3554a78df4a3594f"
+    },
+    {
+      "path": "dist/assets/index-03V2tbac.js",
+      "bytes": 983955,
+      "sha256": "f8f4973f336f211d253ec2f719171f6fdd22b4b078ccc001751fd20b20035a72"
+    },
+    {
+      "path": "dist/assets/index-C5Wj3ewJ.js",
+      "bytes": 296934,
+      "sha256": "9d06761871a072bcf2ae0600741cff2d1019a0a5320be17650066db815623caa"
+    },
+    {
+      "path": "dist/assets/index-D3RD81o2.js",
+      "bytes": 427501,
+      "sha256": "eb6b66d2243dafc9f27c80195ab0f76d9a3299d70b23213b6a3b83ae8e955f6b"
+    },
+    {
+      "path": "dist/assets/index-DYXFdy2F.css",
+      "bytes": 24223,
+      "sha256": "e8908d766136c1fb1250cc63bc1a039fab30bc3982442ee26f004f151f6545c4"
+    },
+    {
+      "path": "dist/assets/pdf.worker.min-yatZIOMy.mjs",
+      "bytes": 1375838,
+      "sha256": "1baa1844c89c80a5b2797c916e75ab29254be46d8e9cb53cb6364d7aad84be36"
+    },
+    {
+      "path": "dist/assets/source-serif-4-latin-400-normal-C1O10bxN.woff",
+      "bytes": 24112,
+      "sha256": "d9e83df242381ae1ecab8238bb865a25b1e9ebe01fe1505a032f12cda6154857"
+    },
+    {
+      "path": "dist/assets/source-serif-4-latin-400-normal-DJ5YJwmz.woff2",
+      "bytes": 20088,
+      "sha256": "02194deb92d3975dd30e11a3824a1f1db32b48c93654e60560cb81ce8e7b5f95"
+    },
+    {
+      "path": "dist/assets/source-serif-4-latin-600-normal-DeJomR3S.woff",
+      "bytes": 25716,
+      "sha256": "cf44d31e38a498c19087148703da185058bd9ae1ab09e05d6327507479e2eb88"
+    },
+    {
+      "path": "dist/assets/source-serif-4-latin-600-normal-DouSKlru.woff2",
+      "bytes": 21532,
+      "sha256": "f2b7e1cf1d277b7608231868135648f8ad8e2b58d8e97ca088bee15dc357bee7"
+    },
+    {
+      "path": "dist/favicon.png",
+      "bytes": 5202,
+      "sha256": "44f9e13c951ea0b28fe04a9631a4103aaeee6a4accf3cafdd00cf7bbbe2ba24b"
+    },
+    {
+      "path": "dist/fonts/ibm-plex-sans.woff2",
+      "bytes": 45712,
+      "sha256": "e2291e842cf5af167122a22881a740c7f2dda7716f1e8cd76680264f4a859470"
+    },
+    {
+      "path": "dist/fonts/licenses/IBMPlexSans-OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    },
+    {
+      "path": "dist/fonts/licenses/SourceSerif4-OFL.txt",
+      "bytes": 4314,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+    },
+    {
+      "path": "dist/fonts/licenses/UnifrakturCook-OFL.txt",
+      "bytes": 4413,
+      "sha256": "99d2f30e282d6174af8ff68597f58bb53c0dcb2b104a4c1b8d19da49021d00d3"
+    },
+    {
+      "path": "dist/fonts/unifraktur-cook.woff2",
+      "bytes": 17280,
+      "sha256": "3304757748716ececd1b87999cb92d61ff5332aefbe8331d5155bbb68218e588"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 1172,
+      "sha256": "3daffe80fbb1d9b1b797f538aadf6b1953b234ad50dc22250e62076a77a87df0"
+    },
+    {
+      "path": "dist/service.json",
+      "bytes": 53,
+      "sha256": "496f72ae3bea16337592ee6807a51567553713f797e8897728494a7c619763f1"
+    }
+  ]
 }

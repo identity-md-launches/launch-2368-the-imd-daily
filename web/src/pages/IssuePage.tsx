@@ -3,6 +3,7 @@ import { addressUrl, DAILY, txUrl, tokenUrl } from "../config";
 import { dateTime, editorialDate } from "../lib/format";
 import { MintPanel } from "../components/MintPanel";
 import { Stale } from "../components/Stale";
+import { DownloadLink } from "../components/DownloadLink";
 
 /** Permalink for one issue: #/issue/<id>. */
 export function IssuePage({ id }: { id: string }) {
@@ -31,7 +32,7 @@ export function IssuePage({ id }: { id: string }) {
         {summary && <p className="deck">{summary}</p>}
         <p className="read-actions">
           <a className="btn btn-primary" href={`#/read/${issue.id}`}>Read the edition</a>
-          <a className="btn" href={issue.pdfURL} target="_blank" rel="noopener" download>Download PDF</a>
+          <DownloadLink url={issue.pdfURL} filename={`imd-daily-${issue.id}.pdf`}>Download PDF</DownloadLink>
         </p>
         <MintPanel issue={issue} />
         <h3 className="h-sub">Record</h3>

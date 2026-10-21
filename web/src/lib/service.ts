@@ -13,7 +13,7 @@ export function normalizeOrigin(v: string): string | null {
   } catch { return null; }
 }
 
-/** The origin saved in this browser wins; otherwise ./service.json from the export (empty by default). */
+/** The origin saved in this browser wins; otherwise use the existing VPS in ./service.json. */
 export async function resolveServiceOrigin(): Promise<string | null> {
   const saved = localStorage.getItem(SERVICE_STORAGE_KEY);
   if (saved && normalizeOrigin(saved)) return normalizeOrigin(saved);

@@ -1,5 +1,60 @@
 [
   {
+    "test": "mint-approval-declined",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-mint-declined",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-simulation-refused",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-approval-reverted",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-pending-and-receipt",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 2,
+    "passed": true
+  },
+  {
+    "test": "mint-insufficient-balance",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-wrong-network",
+    "browser": "chromium",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-expiry-retains-reading",
+    "browser": "chromium",
+    "mocked": true,
+    "passed": true
+  },
+  {
     "test": "reader",
     "browser": "chromium",
     "width": 390,
@@ -16,7 +71,7 @@
     ],
     "scrolling": {
       "top": 3141,
-      "page": 161
+      "page": 167
     }
   },
   {
@@ -66,7 +121,7 @@
     ],
     "scrolling": {
       "top": 8523,
-      "page": 65
+      "page": 67
     }
   },
   {
@@ -92,7 +147,7 @@
     "width": 320,
     "scroll": 320,
     "client": 320,
-    "table": 280
+    "table": 288
   },
   {
     "test": "vault",
@@ -100,7 +155,7 @@
     "width": 390,
     "scroll": 390,
     "client": 390,
-    "table": 349.53125
+    "table": 358
   },
   {
     "test": "empty-archive-navigation",
@@ -125,7 +180,7 @@
   {
     "test": "outage",
     "route": "issue",
-    "text": "Skip to content\nWednesday, October 21, 2026\nConnect\nThe IMD Daily\nNo edition published yet\nEthereum edition\nToday\nArchive\nMy Collection\nVault\nAbout\n\nThe edition could not be checked. Try again. Retry\n\nThe IMD Daily · ERC-1155 on Ethereum\nPublisher desk"
+    "text": "Skip to content\nThe IMD Daily\nToday\nArchive\nMy Collection\nAbout\nConnect wallet\n\nThe edition could not be checked. Try again. Retry\n\nThe IMD Daily\nIndependent community press · Ethereum\nAbout the paper\nVault\nPublisher desk"
   },
   {
     "test": "outage",
@@ -186,10 +241,162 @@
     "passed": true
   },
   {
-    "test": "browser-availability",
+    "test": "mint-approval-declined",
     "browser": "webkit",
-    "skipped": true,
-    "reason": "Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Missing libraries:                                   ║\n║     libgtk-4.so.1                                    ║\n║     libpangocairo-1.0.so.0                           ║\n║     libgdk_pixbuf-2.0.so.0                           ║\n║     libcairo-gobject.so.2   "
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-mint-declined",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-simulation-refused",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-approval-reverted",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 1,
+    "passed": true
+  },
+  {
+    "test": "mint-pending-and-receipt",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 2,
+    "passed": true
+  },
+  {
+    "test": "mint-insufficient-balance",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-wrong-network",
+    "browser": "webkit",
+    "mocked": true,
+    "walletRequests": 0,
+    "passed": true
+  },
+  {
+    "test": "mint-expiry-retains-reading",
+    "browser": "webkit",
+    "mocked": true,
+    "passed": true
+  },
+  {
+    "test": "reader",
+    "browser": "webkit",
+    "width": 390,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": 12,
+      "width": 732,
+      "viewport": 390
+    },
+    "nav": [
+      "2",
+      "3",
+      "4"
+    ],
+    "scrolling": {
+      "top": 3141,
+      "page": 167
+    }
+  },
+  {
+    "test": "reader-right-edge",
+    "browser": "webkit",
+    "width": 390,
+    "edge": 378,
+    "viewport": 390
+  },
+  {
+    "test": "fit-navigation",
+    "browser": "webkit",
+    "width": 390,
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "small-page-navigation",
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "synthetic-pinch-zoom",
+    "zoom": "150%",
+    "left": 12
+  },
+  {
+    "test": "reader",
+    "browser": "webkit",
+    "width": 1440,
+    "left": {
+      "scrollLeft": 0,
+      "pageLeft": 12,
+      "width": 2000,
+      "viewport": 1440
+    },
+    "nav": [
+      "2",
+      "3",
+      "4"
+    ],
+    "scrolling": {
+      "top": 8523,
+      "page": 67
+    }
+  },
+  {
+    "test": "reader-right-edge",
+    "browser": "webkit",
+    "width": 1440,
+    "edge": 1428,
+    "viewport": 1440
+  },
+  {
+    "test": "fit-navigation",
+    "browser": "webkit",
+    "width": 1440,
+    "pages": [
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "test": "vault",
+    "browser": "webkit",
+    "width": 320,
+    "scroll": 320,
+    "client": 320,
+    "table": 288
+  },
+  {
+    "test": "vault",
+    "browser": "webkit",
+    "width": 390,
+    "scroll": 390,
+    "client": 390,
+    "table": 358
   },
   {
     "test": "runtime-errors",

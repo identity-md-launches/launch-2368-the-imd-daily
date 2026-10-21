@@ -1,25 +1,24 @@
 {
   "limitBytes": 8388608,
-  "submissionFileCount": 194,
-  "totalFileBytes": 5966979,
+  "submissionFileCount": 217,
+  "totalFileBytes": 8073034,
   "pathBudgets": {
-    "responses": {
-      "limitBytes": 16384,
-      "actualBytes": 5566
-    },
     "validation": {
       "limitBytes": 32768,
-      "actualBytes": 13664
+      "actualBytes": 17893
     },
     "checkReports": {
       "limitBytes": 131072,
-      "actualBytes": 45378
+      "actualBytes": 104354
     },
     "screenshots": {
       "limitBytes": 1048576,
-      "actualBytes": 698332
+      "actualBytes": 905573
     }
   },
   "protectedFilesUnchanged": true,
-  "generatedDependenciesOrCachesIncluded": false
+  "generatedDependenciesOrCachesIncluded": false,
+  "ignoreFileChanged": false,
+  "submodulesIncluded": false,
+  "hosting": "Delivery plane; worker publish command refused job scope, no naming-specific blocker established"
 }

@@ -1,68 +1,252 @@
-[
-  {
-    "test": "reader",
+{
+  "chromium": {
+    "mode": "LIVE reads; local static export under requested HTTPS origin",
     "browser": "chromium",
-    "width": 390,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": -171,
-      "width": 732,
-      "viewport": 390
-    },
-    "nav": [
-      "1",
-      "1",
-      "1"
-    ],
-    "scrolling": {
-      "top": 1059,
-      "page": 2217
-    }
+    "source": "https://ethereum-rpc.publicnode.com",
+    "at": "2026-10-21T10:49:10.206Z",
+    "checks": [
+      {
+        "name": "deployed contracts and issue",
+        "passed": true,
+        "issueId": "1",
+        "supply": "0",
+        "price": "100000000000000000",
+        "publishedAt": "1792576715",
+        "closesAt": "1792663115",
+        "available": true
+      },
+      {
+        "name": "live PDF SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/0f66a502800b27215aaac11d1ec109919dbd5250637e8f7989b439ec33c5b86a.pdf",
+        "bytes": 23259417,
+        "sha256": "0x0f66a502800b27215aaac11d1ec109919dbd5250637e8f7989b439ec33c5b86a"
+      },
+      {
+        "name": "live cover SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/38ce83557cce0fd6cc8991a61e97a82fadfee83ee12058949db0e5fe7c3895ed.png",
+        "bytes": 4558217,
+        "sha256": "0x38ce83557cce0fd6cc8991a61e97a82fadfee83ee12058949db0e5fe7c3895ed"
+      },
+      {
+        "name": "live metadata SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/bb0fc31b8057df4a67c8ad485d2b8f6a8f0b801c7772e5c7917f48a78f9df7d3.json",
+        "bytes": 1079,
+        "sha256": "0xbb0fc31b8057df4a67c8ad485d2b8f6a8f0b801c7772e5c7917f48a78f9df7d3"
+      },
+      {
+        "name": "quantity totals, input validation and recipient disclosure",
+        "passed": true
+      },
+      {
+        "name": "wallet picker, keyboard trap, Escape and focus restoration",
+        "passed": true,
+        "signing": "not attempted; no real wallet available"
+      },
+      {
+        "name": "responsive 320",
+        "passed": true,
+        "viewport": 320,
+        "scrollWidth": 320,
+        "readBottom": 583.3125
+      },
+      {
+        "name": "responsive 390",
+        "passed": true,
+        "viewport": 390,
+        "scrollWidth": 390,
+        "readBottom": 645.546875
+      },
+      {
+        "name": "responsive 759",
+        "passed": true,
+        "viewport": 759,
+        "scrollWidth": 759,
+        "readBottom": 645.546875
+      },
+      {
+        "name": "responsive 900",
+        "passed": true,
+        "viewport": 900,
+        "scrollWidth": 900,
+        "readBottom": 1047.40625
+      },
+      {
+        "name": "responsive 1100",
+        "passed": true,
+        "viewport": 1100,
+        "scrollWidth": 1100,
+        "readBottom": 843.484375
+      },
+      {
+        "name": "responsive 1440",
+        "passed": true,
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "readBottom": 845.921875
+      },
+      {
+        "name": "mobile wallet deep links and Smart Wallet picker",
+        "passed": true,
+        "emulated": "iPhone user agent without injected provider; no external wallet opened"
+      },
+      {
+        "name": "live archive search and real thumbnail",
+        "passed": true
+      },
+      {
+        "name": "actual new-origin service health and login boundary",
+        "passed": true,
+        "health": true,
+        "challengeStatus": 200,
+        "challengeNamesOrigin": true,
+        "nonPublisherStatus": 403,
+        "unsignedStatus": 400
+      },
+      {
+        "name": "existing PDF reader navigation, zoom, fullscreen, lazy rendering and original-byte download",
+        "passed": true,
+        "actualPages": 6
+      },
+      {
+        "name": "routes, local resources and runtime errors",
+        "passed": true,
+        "errors": [],
+        "failedLocal": [],
+        "rpcMethods": [
+          "eth_blockNumber",
+          "eth_getBlockByNumber",
+          "eth_call",
+          "eth_getLogs"
+        ]
+      }
+    ]
   },
-  {
-    "test": "reader",
-    "browser": "chromium",
-    "width": 1440,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": -280,
-      "width": 2000,
-      "viewport": 1440
-    },
-    "nav": [
-      "1",
-      "1",
-      "1"
-    ],
-    "scrolling": {
-      "top": 2853,
-      "page": 5709
-    }
-  },
-  {
-    "test": "vault",
-    "browser": "chromium",
-    "width": 320,
-    "scroll": 457,
-    "client": 320,
-    "table": 437
-  },
-  {
-    "test": "vault",
-    "browser": "chromium",
-    "width": 390,
-    "scroll": 457,
-    "client": 390,
-    "table": 437
-  },
-  {
-    "test": "outage",
-    "route": "issue",
-    "text": "Skip to content\nWednesday, October 21, 2026\nConnect\nThe IMD Daily\nNo edition published yet\nEthereum edition\nToday\nArchive\nMy Collection\nVault\nAbout\nNo issue 1 on chain\n\nThe contract has 0 published issues. Open the archive\n\nThe IMD Daily · ERC-1155 on Ethereum\nPublisher desk"
-  },
-  {
-    "test": "outage",
-    "route": "read",
-    "text": "No issue 1 on chain. Open the archive"
+  "webkit": {
+    "mode": "LIVE reads; local static export under requested HTTPS origin",
+    "browser": "webkit",
+    "source": "https://ethereum-rpc.publicnode.com",
+    "at": "2026-10-21T10:49:11.569Z",
+    "checks": [
+      {
+        "name": "deployed contracts and issue",
+        "passed": true,
+        "issueId": "1",
+        "supply": "0",
+        "price": "100000000000000000",
+        "publishedAt": "1792576715",
+        "closesAt": "1792663115",
+        "available": true
+      },
+      {
+        "name": "live PDF SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/0f66a502800b27215aaac11d1ec109919dbd5250637e8f7989b439ec33c5b86a.pdf",
+        "bytes": 23259417,
+        "sha256": "0x0f66a502800b27215aaac11d1ec109919dbd5250637e8f7989b439ec33c5b86a"
+      },
+      {
+        "name": "live cover SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/38ce83557cce0fd6cc8991a61e97a82fadfee83ee12058949db0e5fe7c3895ed.png",
+        "bytes": 4558217,
+        "sha256": "0x38ce83557cce0fd6cc8991a61e97a82fadfee83ee12058949db0e5fe7c3895ed"
+      },
+      {
+        "name": "live metadata SHA-256",
+        "passed": true,
+        "url": "https://the-imd-daily.duckdns.org/files/bb0fc31b8057df4a67c8ad485d2b8f6a8f0b801c7772e5c7917f48a78f9df7d3.json",
+        "bytes": 1079,
+        "sha256": "0xbb0fc31b8057df4a67c8ad485d2b8f6a8f0b801c7772e5c7917f48a78f9df7d3"
+      },
+      {
+        "name": "quantity totals, input validation and recipient disclosure",
+        "passed": true
+      },
+      {
+        "name": "wallet picker, keyboard trap, Escape and focus restoration",
+        "passed": true,
+        "signing": "not attempted; no real wallet available"
+      },
+      {
+        "name": "responsive 320",
+        "passed": true,
+        "viewport": 320,
+        "scrollWidth": 320,
+        "readBottom": 583.3125
+      },
+      {
+        "name": "responsive 390",
+        "passed": true,
+        "viewport": 390,
+        "scrollWidth": 390,
+        "readBottom": 645.546875
+      },
+      {
+        "name": "responsive 759",
+        "passed": true,
+        "viewport": 759,
+        "scrollWidth": 759,
+        "readBottom": 645.546875
+      },
+      {
+        "name": "responsive 900",
+        "passed": true,
+        "viewport": 900,
+        "scrollWidth": 900,
+        "readBottom": 1047.40625
+      },
+      {
+        "name": "responsive 1100",
+        "passed": true,
+        "viewport": 1100,
+        "scrollWidth": 1100,
+        "readBottom": 843.484375
+      },
+      {
+        "name": "responsive 1440",
+        "passed": true,
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "readBottom": 845.921875
+      },
+      {
+        "name": "mobile wallet deep links and Smart Wallet picker",
+        "passed": true,
+        "emulated": "iPhone user agent without injected provider; no external wallet opened"
+      },
+      {
+        "name": "live archive search and real thumbnail",
+        "passed": true
+      },
+      {
+        "name": "actual new-origin service health and login boundary",
+        "passed": true,
+        "health": true,
+        "challengeStatus": 200,
+        "challengeNamesOrigin": true,
+        "nonPublisherStatus": 403,
+        "unsignedStatus": 400
+      },
+      {
+        "name": "existing PDF reader navigation, zoom, fullscreen, lazy rendering and original-byte download",
+        "passed": true,
+        "actualPages": 6
+      },
+      {
+        "name": "routes, local resources and runtime errors",
+        "passed": true,
+        "errors": [],
+        "failedLocal": [],
+        "rpcMethods": [
+          "eth_blockNumber",
+          "eth_getBlockByNumber",
+          "eth_call",
+          "eth_getLogs"
+        ]
+      }
+    ]
   }
-]
+}

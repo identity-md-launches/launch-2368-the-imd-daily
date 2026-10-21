@@ -4,16 +4,10 @@
 
 vite v6.4.5 building for production...
 transforming...
-node_modules/@base-org/account/node_modules/ox/_esm/core/Address.js (6:21): A comment
 
-"/*#__PURE__*/"
+__VITE_PUBLIC_ASSET__41ebdf65__ referenced in __VITE_PUBLIC_ASSET__41ebdf65__ didn't resolve at build time, it will remain unchanged to be resolved at runtime
 
-in "node_modules/@base-org/account/node_modules/ox/_esm/core/Address.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
-node_modules/@base-org/account/node_modules/ox/_esm/core/Base64.js (6:27): A comment
-
-"/*#__PURE__*/"
-
-in "node_modules/@base-org/account/node_modules/ox/_esm/core/Base64.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+__VITE_PUBLIC_ASSET__2e4dbcea__ referenced in __VITE_PUBLIC_ASSET__2e4dbcea__ didn't resolve at build time, it will remain unchanged to be resolved at runtime
 node_modules/@coinbase/wallet-sdk/node_modules/ox/_esm/core/Address.js (6:21): A comment
 
 "/*#__PURE__*/"
@@ -24,21 +18,31 @@ node_modules/@coinbase/wallet-sdk/node_modules/ox/_esm/core/Base64.js (6:27): A 
 "/*#__PURE__*/"
 
 in "node_modules/@coinbase/wallet-sdk/node_modules/ox/_esm/core/Base64.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/@base-org/account/node_modules/ox/_esm/core/Address.js (6:21): A comment
+
+"/*#__PURE__*/"
+
+in "node_modules/@base-org/account/node_modules/ox/_esm/core/Address.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/@base-org/account/node_modules/ox/_esm/core/Base64.js (6:27): A comment
+
+"/*#__PURE__*/"
+
+in "node_modules/@base-org/account/node_modules/ox/_esm/core/Base64.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
 node_modules/@wagmi/connectors/node_modules/ox/_esm/core/Base64.js (6:27): A comment
 
 "/*#__PURE__*/"
 
 in "node_modules/@wagmi/connectors/node_modules/ox/_esm/core/Base64.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
-node_modules/@base-org/account/node_modules/ox/_esm/core/internal/cursor.js (2:21): A comment
-
-"/*#__PURE__*/"
-
-in "node_modules/@base-org/account/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
 node_modules/@coinbase/wallet-sdk/node_modules/ox/_esm/core/internal/cursor.js (2:21): A comment
 
 "/*#__PURE__*/"
 
 in "node_modules/@coinbase/wallet-sdk/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/@base-org/account/node_modules/ox/_esm/core/internal/cursor.js (2:21): A comment
+
+"/*#__PURE__*/"
+
+in "node_modules/@base-org/account/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
 node_modules/@wagmi/connectors/node_modules/zod/v4/core/regexes.js (74:0): A comment
 
 "/** Anchors a pattern source. The interpolation lives here rather than at the call site because
@@ -71,31 +75,29 @@ node_modules/@reown/appkit/node_modules/ox/_esm/core/internal/cursor.js (2:21): 
 "/*#__PURE__*/"
 
 in "node_modules/@reown/appkit/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
-node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/internal/cursor.js (2:21): A comment
-
-"/*#__PURE__*/"
-
-in "node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
 node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/Address.js (6:21): A comment
 
 "/*#__PURE__*/"
 
 in "node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/Address.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
-✓ 5304 modules transformed.
+node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/internal/cursor.js (2:21): A comment
+
+"/*#__PURE__*/"
+
+in "node_modules/@reown/appkit-controllers/node_modules/ox/_esm/core/internal/cursor.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 5306 modules transformed.
 rendering chunks...
 computing gzip size...
-../dist/index.html                                                   1.06 kB │ gzip:   0.50 kB
-../dist/assets/source-serif-4-latin-400-normal-DJ5YJwmz.woff2       20.09 kB
-../dist/assets/source-serif-4-latin-600-normal-DouSKlru.woff2       21.53 kB
-../dist/assets/playfair-display-latin-900-normal-oSb7_CWx.woff2     22.37 kB
-../dist/assets/source-serif-4-latin-400-normal-C1O10bxN.woff        24.11 kB
-../dist/assets/source-serif-4-latin-600-normal-DeJomR3S.woff        25.72 kB
-../dist/assets/playfair-display-latin-900-normal-DypQvTWf.woff      27.40 kB
-../dist/assets/pdf.worker.min-yatZIOMy.mjs                       1,375.84 kB
-../dist/assets/index-CrBNqaYO.css                                   14.66 kB │ gzip:   3.58 kB
-../dist/assets/ccip-DmOfX8rC.js                                      3.05 kB │ gzip:   1.39 kB
-../dist/assets/hooks.module-DE9oX6xH.js                             15.84 kB │ gzip:   6.29 kB
-../dist/assets/index-BHzUuMrw.js                                   296.93 kB │ gzip:  88.97 kB
-../dist/assets/index-CGZNVqtS.js                                   427.50 kB │ gzip: 127.86 kB
-../dist/assets/index-BanSrxaK.js                                   978.86 kB │ gzip: 295.81 kB
-✓ built in 14.34s
+../dist/index.html                                                 1.17 kB │ gzip:   0.55 kB
+../dist/assets/source-serif-4-latin-400-normal-DJ5YJwmz.woff2     20.09 kB
+../dist/assets/source-serif-4-latin-600-normal-DouSKlru.woff2     21.53 kB
+../dist/assets/source-serif-4-latin-400-normal-C1O10bxN.woff      24.11 kB
+../dist/assets/source-serif-4-latin-600-normal-DeJomR3S.woff      25.72 kB
+../dist/assets/pdf.worker.min-yatZIOMy.mjs                     1,375.84 kB
+../dist/assets/index-DYXFdy2F.css                                 24.22 kB │ gzip:   5.78 kB
+../dist/assets/ccip-D5zzGQty.js                                    3.05 kB │ gzip:   1.40 kB
+../dist/assets/hooks.module-DE9oX6xH.js                           15.84 kB │ gzip:   6.29 kB
+../dist/assets/index-C5Wj3ewJ.js                                 296.93 kB │ gzip:  88.97 kB
+../dist/assets/index-D3RD81o2.js                                 427.50 kB │ gzip: 127.86 kB
+../dist/assets/index-03V2tbac.js                                 983.96 kB │ gzip: 297.20 kB
+✓ built in 20.64s

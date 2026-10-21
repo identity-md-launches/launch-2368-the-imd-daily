@@ -14,6 +14,7 @@ import {
   encodeEventTopics,
   encodeAbiParameters,
   parseAbi,
+  encodeErrorResult,
 } from "viem";
 
 // All chain, wallet and service data below are local fixtures. External requests are blocked.
@@ -138,8 +139,12 @@ let base,
   receiptReady = true,
   receiptOverride = null,
   walletMode = "reject",
-  rangeRequests = 0;
+  rangeRequests = 0,
+  fixtureAllowance = 0n, fixtureSupply = 0n, fixtureBalance = 10000n * 10n ** 18n,
+  fixtureWalletChain = "0x1", receiptStatus = "0x1", simulateMintFailure = false;
 function reset() {
+  fixtureAllowance = 0n; fixtureSupply = 0n; fixtureBalance = 10000n * 10n ** 18n;
+  fixtureWalletChain = "0x1"; receiptStatus = "0x1"; simulateMintFailure = false;
   offline = false;
   markCalls = [];
   markFail = false;
@@ -185,7 +190,7 @@ function contractCall(data) {
         break;
       case "issueStatus": {
         const i = issues[Number(args[0]) - 1];
-        result = [0n, i.publishedAt, i.closesAt, price, false];
+        result = [fixtureSupply, i.publishedAt, i.closesAt, price, true];
         break;
       }
       case "totalCollected":
@@ -196,7 +201,7 @@ function contractCall(data) {
         break;
       case "balance":
       case "balanceOf":
-        result = 10000n * 10n ** 18n;
+        result = fixtureBalance;
         break;
       case "createIssue":
         simulations.push(args[0]);
@@ -209,7 +214,22 @@ function contractCall(data) {
         result = 18;
         break;
       case "allowance":
-        result = 0n;
+        result = fixtureAllowance;
+        break;
+      case "balanceOfBatch":
+        result = args[1].map(() => fixtureSupply);
+        break;
+      case "quote":
+        result = args[0] * price;
+        break;
+      case "approve":
+        simulations.push({ functionName: f, args });
+        result = true;
+        break;
+      case "mint":
+        simulations.push({ functionName: f, args });
+        if (simulateMintFailure) throw Object.assign(new Error("fixture mint closed"), { revertData: encodeErrorResult({ abi, errorName: "MintClosed", args: [args[0]] }) });
+        result = undefined;
         break;
       default:
         throw new Error(`unhandled contract ${f}`);
@@ -255,11 +275,11 @@ function rpc(q) {
       result = "0x1";
       break;
     case "eth_blockNumber":
-      result = "0x1906200";
+      result = receiptReady ? "0x1906201" : "0x1906200";
       break;
     case "eth_getBlockByNumber":
       result = {
-        number: "0x1906200",
+        number: receiptReady ? "0x1906201" : "0x1906200",
         timestamp: "0x6ad74000",
         hash: blockHash,
         parentHash: blockHash,
@@ -277,7 +297,11 @@ function rpc(q) {
       };
       break;
     case "eth_call":
-      result = contractCall(q.params[0].data);
+      try { result = contractCall(q.params[0].data); }
+      catch (e) {
+        if (e.revertData) return { jsonrpc: "2.0", id: q.id, error: { code: 3, message: "execution reverted", data: e.revertData } };
+        throw e;
+      }
       break;
     case "eth_getLogs":
       result = issues.length ? [logFor(issues.length)] : [];
@@ -291,6 +315,14 @@ function rpc(q) {
     case "eth_gasPrice":
     case "eth_maxPriorityFeePerGas":
       result = "0x1";
+      break;
+    case "eth_getTransactionByHash":
+      result = {
+        hash: tx, blockHash: receiptReady ? blockHash : null, blockNumber: receiptReady ? "0x1906200" : null,
+        transactionIndex: receiptReady ? "0x0" : null, from: publisher, to: walletCalls.at(-1)?.to ?? daily,
+        input: walletCalls.at(-1)?.data ?? "0x", nonce: "0x0", value: "0x0", gas: "0x40000", gasPrice: "0x1",
+        maxFeePerGas: "0x2", maxPriorityFeePerGas: "0x1", type: "0x2", chainId: "0x1", v: "0x1", r: "0x1", s: "0x1",
+      };
       break;
     case "eth_getTransactionReceipt":
       result = receiptReady
@@ -310,7 +342,7 @@ function rpc(q) {
                 : logFor(issues.length),
             ],
             logsBloom: `0x${"0".repeat(512)}`,
-            status: "0x1",
+            status: receiptStatus,
             effectiveGasPrice: "0x1",
             type: "0x2",
           }
@@ -473,7 +505,10 @@ async function setup(browser, width = 390, wallet = false, pending = null) {
   await ctx.exposeBinding("__submitFixture", (_, request) => {
     walletCalls.push(request);
     if (walletMode !== "confirm") return null;
-    const c = decodeFunctionData({ abi, data: request.data }).args[0];
+    const decoded = decodeFunctionData({ abi: request.to.toLowerCase() === daily ? abi : tokenAbi, data: request.data });
+    if (decoded.functionName === "approve") { fixtureAllowance = decoded.args[1]; return tx; }
+    if (decoded.functionName === "mint") { fixtureSupply += decoded.args[1]; return tx; }
+    const c = decoded.args[0];
     issues.push({
       content: c,
       publishedAt: 1792540800n,
@@ -493,6 +528,10 @@ async function setup(browser, width = 390, wallet = false, pending = null) {
         const q = route.request().postDataJSON();
         return route.fulfill({ json: Array.isArray(q) ? q.map(rpc) : rpc(q) });
       } catch (e) {
+        if (e.revertData) {
+          const q = route.request().postDataJSON();
+          return route.fulfill({ json: { jsonrpc: "2.0", id: q.id, error: { code: 3, message: "execution reverted", data: e.revertData } } });
+        }
         console.error("RPC error", e);
         return route.fulfill({ status: 500, body: String(e) });
       }
@@ -502,7 +541,7 @@ async function setup(browser, width = 390, wallet = false, pending = null) {
     return route.abort();
   });
   await ctx.addInitScript(
-    ({ base, publisher, pendingKey, pending, wallet }) => {
+    ({ base, publisher, pendingKey, pending, wallet, fixtureWalletChain }) => {
       localStorage.setItem("imd-daily:service-origin", base);
       if (pending && !sessionStorage.getItem("seeded")) {
         localStorage.setItem(pendingKey, JSON.stringify(pending));
@@ -520,7 +559,7 @@ async function setup(browser, width = 390, wallet = false, pending = null) {
               return [publisher];
             }
             if (method === "eth_accounts") return connected ? [publisher] : [];
-            if (method === "eth_chainId") return "0x1";
+            if (method === "eth_chainId") return fixtureWalletChain;
             if (method === "personal_sign") return `0x${"1".repeat(130)}`;
             if (method === "wallet_getCapabilities") return {};
             if (method === "eth_sendTransaction") {
@@ -551,7 +590,7 @@ async function setup(browser, width = 390, wallet = false, pending = null) {
         announce();
       }
     },
-    { base, publisher, pendingKey, pending, wallet },
+    { base, publisher, pendingKey, pending, wallet, fixtureWalletChain },
   );
   const page = await ctx.newPage();
   page.on("pageerror", (e) => pageErrors.push(e.message));
@@ -565,7 +604,7 @@ async function ready(page, route = "#/read/2") {
 async function connect(page) {
   if (!(await page.getByRole("button", { name: /Disconnect/ }).count())) {
     await page
-      .getByRole("button", { name: "Connect", exact: true })
+      .getByRole("button", { name: "Connect wallet", exact: true })
       .first()
       .click();
     await page
@@ -580,6 +619,90 @@ async function connect(page) {
     .getByText("Signed in as the publisher for this session.")
     .waitFor();
 }
+
+async function connectFixture(page) {
+  await page.getByRole("button", { name: "Connect wallet", exact: true }).first().click();
+  await page.getByRole("button", { name: /Local fixture wallet|Browser wallet/ }).first().click();
+  await page.getByRole("button", { name: /Disconnect|Switch to Ethereum/ }).first().waitFor();
+}
+async function checkMintStates(browser, browserName) {
+  // Every RPC, wallet response, service response and issue in this function is a LOCAL FIXTURE.
+  for (const scenario of ["approval-declined", "mint-declined", "simulation-refused", "approval-reverted", "pending-and-receipt", "insufficient-balance", "wrong-network"]) {
+    console.log("mint state", browserName, scenario);
+    reset(); setIssues();
+    if (scenario === "mint-declined" || scenario === "simulation-refused") fixtureAllowance = price * 2n;
+    if (scenario === "simulation-refused") simulateMintFailure = true;
+    if (scenario === "approval-reverted") { walletMode = "confirm"; receiptStatus = "0x0"; }
+    if (scenario === "pending-and-receipt") { walletMode = "confirm"; receiptReady = false; }
+    if (scenario === "insufficient-balance") fixtureBalance = 0n;
+    if (scenario === "wrong-network") fixtureWalletChain = "0xa";
+    const { ctx, page } = await setup(browser, 390, true);
+    await page.goto(base + "/preview/");
+    await page.locator(".mint .quantity-stepper").waitFor();
+    await connectFixture(page);
+    if (scenario === "wrong-network") {
+      assert.equal(await page.locator(".mint").getByRole("button", { name: /Collect [0-9]/ }).count(), 0);
+      await page.locator(".mint").getByRole("button", { name: "Switch to Ethereum", exact: true }).waitFor();
+    } else {
+      await page.getByRole("button", { name: "Increase quantity", exact: true }).click();
+      assert.equal(await page.locator(".collector-total strong").innerText(), "0.2 IMD");
+      const collect = page.getByRole("button", { name: "Collect 2 copies", exact: true });
+      if (scenario === "insufficient-balance") {
+        await page.getByText("This wallet holds too little IMD for the total.", { exact: true }).waitFor();
+        assert(await collect.isDisabled());
+      } else {
+        await collect.click();
+        if (scenario === "pending-and-receipt") {
+          await page.getByText("Approval sent. Waiting for confirmation…", { exact: false }).waitFor();
+          assert(await page.locator(".qty").isDisabled());
+          assert(await page.getByRole("button", { name: "Working…", exact: false }).isDisabled());
+          receiptReady = true;
+          await page.locator(".mint-step .ok").waitFor({ timeout: 45000 });
+          assert((await page.locator(".mint-step .ok").innerText()).includes("2 copies"));
+          assert(await page.getByRole("link", { name: "Receipt on Etherscan", exact: true }).getAttribute("href"));
+          assert.equal(walletCalls.length, 2);
+        } else {
+          await page.locator(".mint-step .err").waitFor({ timeout: 45000 });
+          if (scenario.includes("declined")) assert((await page.locator(".mint-step .err").innerText()).includes("declined"));
+          if (scenario === "simulation-refused") {
+            assert((await page.locator(".mint-step .err").innerText()).includes("closed"));
+            assert.equal(walletCalls.length, 0);
+          }
+          if (scenario === "approval-reverted") assert((await page.locator(".mint-step .err").innerText()).includes("approval reverted"));
+        }
+        if (walletCalls.length) {
+          const first = walletCalls[0];
+          const decoded = decodeFunctionData({ abi: first.to.toLowerCase() === daily ? abi : tokenAbi, data: first.data });
+          assert(!first.value || BigInt(first.value) === 0n, "ETH is gas only");
+          if (decoded.functionName === "approve") {
+            assert.equal(decoded.args[0].toLowerCase(), daily);
+            assert.equal(decoded.args[1], 2n * price, "Approval must be the exact total");
+          } else {
+            assert.equal(decoded.functionName, "mint");
+            assert.equal(decoded.args[0], 2n);
+            assert.equal(decoded.args[1], 2n);
+            assert.equal(decoded.args[2].toLowerCase(), publisher.toLowerCase());
+            assert(decoded.args[3] < issues[1].closesAt);
+          }
+        }
+      }
+    }
+    results.push({ test: "mint-" + scenario, browser: browserName, mocked: true, walletRequests: walletCalls.length, passed: true });
+    await ctx.close();
+  }
+  reset(); setIssues();
+  issues[1].closesAt = 1792491522n;
+  const expiry = await setup(browser);
+  await expiry.page.goto(base + "/preview/");
+  await expiry.page.locator(".window-clock strong").filter({ hasText: "Closed" }).waitFor({ timeout: 10000 });
+  assert.equal(await expiry.page.locator(".mint-actions").count(), 0);
+  assert(await expiry.page.getByRole("link", { name: "Read the edition", exact: true }).getAttribute("href"));
+  assert(await expiry.page.getByRole("link", { name: "Download PDF", exact: true }).getAttribute("href"));
+  results.push({ test: "mint-expiry-retains-reading", browser: browserName, mocked: true, passed: true });
+  await expiry.ctx.close();
+  reset(); setIssues();
+}
+
 const browsers = [];
 try {
   for (const [name, type] of [
@@ -602,6 +725,8 @@ try {
       continue;
     }
     console.log("launched", name, mode, only);
+    if (!only || only === "mint") await checkMintStates(browser, name);
+    if (only === "mint") { await browser.close(); continue; }
     for (const width of [390, 1440]) {
       if (only) continue;
       reset();
@@ -731,40 +856,40 @@ try {
           await page.locator("#page-input").press("Enter");
           await page.locator(".reader-pages").evaluate((el) => {
             const touches = [
-              new Touch({
+              {
                 identifier: 1,
                 target: el,
                 clientX: 80,
                 clientY: 300,
-              }),
-              new Touch({
+              },
+              {
                 identifier: 2,
                 target: el,
                 clientX: 180,
                 clientY: 300,
-              }),
+              },
             ];
             el.dispatchEvent(
-              new TouchEvent("touchstart", { bubbles: true, touches }),
+              Object.assign(new Event("touchstart", { bubbles: true }), { touches }),
             );
           });
           await page.locator(".reader-pages").evaluate((el) => {
             const touches = [
-              new Touch({
+              {
                 identifier: 1,
                 target: el,
                 clientX: 55,
                 clientY: 300,
-              }),
-              new Touch({
+              },
+              {
                 identifier: 2,
                 target: el,
                 clientX: 205,
                 clientY: 300,
-              }),
+              },
             ];
             el.dispatchEvent(
-              new TouchEvent("touchmove", { bubbles: true, touches }),
+              Object.assign(new Event("touchmove", { bubbles: true }), { touches }),
             );
           });
           await page.waitForTimeout(50);
@@ -772,7 +897,7 @@ try {
             .locator(".reader-pages")
             .evaluate((el) =>
               el.dispatchEvent(
-                new TouchEvent("touchend", { bubbles: true, touches: [] }),
+                Object.assign(new Event("touchend", { bubbles: true }), { touches: [] }),
               ),
             );
           await page
@@ -822,7 +947,7 @@ try {
         await empty.page.goto(`${base}/preview/#/`);
         await empty.page
           .getByRole("heading", {
-            name: "The first edition is still on the press",
+            name: "The first edition is still on the press.",
             exact: true,
           })
           .waitFor();
@@ -835,7 +960,7 @@ try {
           fullPage: true,
         });
         await empty.page
-          .getByRole("link", { name: "How The IMD Daily works", exact: true })
+          .locator("#main").getByRole("link", { name: "About the paper", exact: true })
           .click();
         await empty.page
           .getByRole("heading", { name: "About The IMD Daily", exact: true })
@@ -853,7 +978,9 @@ try {
           ...issues[1],
           content: content("Large raster TEST FIXTURE ONLY", raster),
         };
-        rangeRequests = 0;
+        rangeRequests = 0,
+  fixtureAllowance = 0n, fixtureSupply = 0n, fixtureBalance = 10000n * 10n ** 18n,
+  fixtureWalletChain = "0x1", receiptStatus = "0x1", simulateMintFailure = false;
         const large = await setup(browser);
         await ready(large.page);
         assert.equal(await large.page.locator(".pdf-page").count(), 4);
@@ -1078,7 +1205,7 @@ try {
           .getByLabel("Search titles, summaries and dates")
           .fill("Recovered unique summary");
         await recovery.page
-          .getByRole("heading", { name: "Fixture two", exact: true })
+          .getByText("Fixture two", { exact: true })
           .waitFor();
       }
       results.push({
