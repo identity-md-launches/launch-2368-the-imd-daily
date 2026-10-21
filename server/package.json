@@ -1,0 +1,14 @@
+{
+  "name": "imd-daily-files",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/main.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "viem": "2.57.7"
+  }
+}

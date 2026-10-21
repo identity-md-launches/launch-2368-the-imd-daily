@@ -1,0 +1,15 @@
+# FILES_DOMAIN is a hostname you keep, e.g. imd-daily.duckdns.org. Caddy obtains and renews
+# a Let's Encrypt certificate for it automatically once ports 80 and 443 reach this server.
+{$FILES_DOMAIN} {
+	encode {
+		# Never re-encode the committed files: hashes are over the exact bytes.
+		match {
+			not path /files/*
+		}
+		gzip
+	}
+	request_body /api/objects/* {
+		max_size 210MB
+	}
+	reverse_proxy files:8080
+}

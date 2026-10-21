@@ -1,0 +1,32 @@
+{
+  "name": "the-imd-daily-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native",
+    "build": "tsc --noEmit && vite build --configLoader native",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview --configLoader native --outDir ../dist",
+    "test": "vitest run --configLoader native",
+    "check:abi": "node scripts/check-abi.mjs"
+  },
+  "dependencies": {
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/source-serif-4": "^5.3.1",
+    "@tanstack/react-query": "^5.104.5",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "^2.57.7",
+    "wagmi": "^2.19.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.5",
+    "vitest": "^3.2.7"
+  }
+}
