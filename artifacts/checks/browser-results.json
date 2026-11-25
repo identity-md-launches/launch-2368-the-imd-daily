@@ -1,405 +1,440 @@
-[
-  {
-    "test": "mint-approval-declined",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-mint-declined",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-simulation-refused",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-approval-reverted",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-pending-and-receipt",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 2,
-    "passed": true
-  },
-  {
-    "test": "mint-insufficient-balance",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-wrong-network",
-    "browser": "chromium",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-expiry-retains-reading",
-    "browser": "chromium",
-    "mocked": true,
-    "passed": true
-  },
-  {
-    "test": "reader",
-    "browser": "chromium",
-    "width": 390,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": 12,
-      "width": 732,
-      "viewport": 390
-    },
-    "nav": [
-      "2",
-      "3",
-      "4"
-    ],
-    "scrolling": {
-      "top": 3141,
-      "page": 167
-    }
-  },
-  {
-    "test": "reader-right-edge",
-    "browser": "chromium",
-    "width": 390,
-    "edge": 378,
-    "viewport": 390
-  },
-  {
-    "test": "fit-navigation",
-    "browser": "chromium",
-    "width": 390,
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "small-page-navigation",
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "synthetic-pinch-zoom",
-    "zoom": "150%",
-    "left": 12
-  },
-  {
-    "test": "reader",
-    "browser": "chromium",
-    "width": 1440,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": 12,
-      "width": 2000,
-      "viewport": 1440
-    },
-    "nav": [
-      "2",
-      "3",
-      "4"
-    ],
-    "scrolling": {
-      "top": 8523,
-      "page": 67
-    }
-  },
-  {
-    "test": "reader-right-edge",
-    "browser": "chromium",
-    "width": 1440,
-    "edge": 1428,
-    "viewport": 1440
-  },
-  {
-    "test": "fit-navigation",
-    "browser": "chromium",
-    "width": 1440,
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "vault",
-    "browser": "chromium",
-    "width": 320,
-    "scroll": 320,
-    "client": 320,
-    "table": 288
-  },
-  {
-    "test": "vault",
-    "browser": "chromium",
-    "width": 390,
-    "scroll": 390,
-    "client": 390,
-    "table": 358
-  },
-  {
-    "test": "empty-archive-navigation",
-    "passed": true
-  },
-  {
-    "test": "large-raster-reader-download",
-    "bytes": 52921453,
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ],
-    "rangeRequests": 2,
-    "color": [
-      255,
-      0,
-      0,
-      255
-    ]
-  },
-  {
-    "test": "outage",
-    "route": "issue",
-    "text": "Skip to content\nThe IMD Daily\nToday\nArchive\nMy Collection\nAbout\nConnect wallet\n\nThe edition could not be checked. Try again. Retry\n\nThe IMD Daily\nIndependent community press · Ethereum\nAbout the paper\nVault\nPublisher desk"
-  },
-  {
-    "test": "outage",
-    "route": "read",
-    "text": "The edition could not be checked. Try again. Retry"
-  },
-  {
-    "test": "prepared-edit",
-    "invalidated": true,
-    "sent": {
-      "title": "Title B reviewed for publication",
-      "editorialDate": "1792454400"
-    },
-    "summary": "Summary B unique-term"
-  },
-  {
-    "test": "recovery",
-    "beforeAuth": true,
-    "markCalls": [
-      {
-        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
-        "issueId": "2",
-        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      },
-      {
-        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
-        "issueId": "2",
-        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      },
-      {
-        "pdfHash": "0x6c5100820fa10b7c24f9ab4d7efa2c57783ea1fc32ff84e0ac34d75b4f529fb9",
-        "issueId": "2",
-        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+{
+  "ranAt": "2026-11-25T06:23:15.352Z",
+  "results": [
+    {
+      "name": "home 320: subscription links, overflow, first screen",
+      "ok": true,
+      "ms": 3200,
+      "detail": {
+        "links": [
+          "header:Subscribe ↗ (opens Paper Route in a new tab)",
+          "subscribe:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)",
+          "footer:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)"
+        ],
+        "overflow": 0,
+        "readBottom": 627,
+        "navRows": 2,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/"
+        ]
       }
-    ],
-    "pending": null,
-    "summaryPublished": true
-  },
-  {
-    "test": "receipt-only-recovery",
-    "passed": true,
-    "markCalls": [
-      {
-        "pdfHash": "0x40d625a9d79181864d145c115270e9f038d7e46e86664b9d4350926be139099f",
-        "issueId": "3",
-        "txHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "name": "home 390: subscription links, overflow, first screen",
+      "ok": true,
+      "ms": 3204,
+      "detail": {
+        "links": [
+          "header:Subscribe ↗ (opens Paper Route in a new tab)",
+          "subscribe:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)",
+          "footer:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)"
+        ],
+        "overflow": 0,
+        "readBottom": 645,
+        "navRows": 1,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/"
+        ]
       }
-    ]
-  },
-  {
-    "test": "normal-confirmation-summary-failure-reload",
-    "passed": true,
-    "submittedTransactions": 1,
-    "serviceAttempts": 3
-  },
-  {
-    "test": "missing-hash-recovery-from-index",
-    "passed": true
-  },
-  {
-    "test": "mint-approval-declined",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-mint-declined",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-simulation-refused",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-approval-reverted",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 1,
-    "passed": true
-  },
-  {
-    "test": "mint-pending-and-receipt",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 2,
-    "passed": true
-  },
-  {
-    "test": "mint-insufficient-balance",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-wrong-network",
-    "browser": "webkit",
-    "mocked": true,
-    "walletRequests": 0,
-    "passed": true
-  },
-  {
-    "test": "mint-expiry-retains-reading",
-    "browser": "webkit",
-    "mocked": true,
-    "passed": true
-  },
-  {
-    "test": "reader",
-    "browser": "webkit",
-    "width": 390,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": 12,
-      "width": 732,
-      "viewport": 390
     },
-    "nav": [
-      "2",
-      "3",
-      "4"
-    ],
-    "scrolling": {
-      "top": 3141,
-      "page": 167
-    }
-  },
-  {
-    "test": "reader-right-edge",
-    "browser": "webkit",
-    "width": 390,
-    "edge": 378,
-    "viewport": 390
-  },
-  {
-    "test": "fit-navigation",
-    "browser": "webkit",
-    "width": 390,
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "small-page-navigation",
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "synthetic-pinch-zoom",
-    "zoom": "150%",
-    "left": 12
-  },
-  {
-    "test": "reader",
-    "browser": "webkit",
-    "width": 1440,
-    "left": {
-      "scrollLeft": 0,
-      "pageLeft": 12,
-      "width": 2000,
-      "viewport": 1440
+    {
+      "name": "home 1440: subscription links, overflow, first screen",
+      "ok": true,
+      "ms": 3715,
+      "detail": {
+        "links": [
+          "header:Subscribe ↗ (opens Paper Route in a new tab)",
+          "subscribe:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)",
+          "footer:Subscribe via Paper Route ↗ (opens Paper Route in a new tab)"
+        ],
+        "overflow": 0,
+        "readBottom": 845,
+        "navRows": 1,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/"
+        ]
+      }
     },
-    "nav": [
-      "2",
-      "3",
-      "4"
-    ],
-    "scrolling": {
-      "top": 8523,
-      "page": 67
+    {
+      "name": "subscription clicks open Paper Route in a new tab, no wallet requests",
+      "ok": true,
+      "ms": 4711,
+      "detail": [
+        {
+          "sel": ".nav .nav-subscribe",
+          "url": "https://paper-route.imd.site/",
+          "opener": true,
+          "referrer": "",
+          "walletCalls": [
+            "eth_accounts"
+          ]
+        },
+        {
+          "sel": "#subscribe .btn-subscribe",
+          "url": "https://paper-route.imd.site/",
+          "opener": true,
+          "referrer": "",
+          "walletCalls": [
+            "eth_accounts"
+          ]
+        },
+        {
+          "sel": "footer a[href*='paper-route']",
+          "url": "https://paper-route.imd.site/",
+          "opener": true,
+          "referrer": "",
+          "walletCalls": [
+            "eth_accounts"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hash routes render",
+      "ok": true,
+      "ms": 16771,
+      "detail": {
+        "seen": {
+          "#/archive": "The archive.",
+          "#/collection": "My Collection",
+          "#/about": "About The IMD Daily",
+          "#/vault": "Vault",
+          "#/publisher": "Publisher desk",
+          "#/issue/34": "The IMD Daily | Issue #35 | November 24, 2026",
+          "#/nope": "Page not found",
+          "#/": "The world of IMD.One edition at a time."
+        },
+        "search": "3 editions match.",
+        "items": 3,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Access to fetch at 'https://the-imd-daily.duckdns.org/health' from origin 'http://127.0.0.1:43591' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested ",
+          "Failed to load resource: net::ERR_FAILED"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "https://the-imd-daily.duckdns.org/health net::ERR_FAILED"
+        ]
+      }
+    },
+    {
+      "name": "reader renders PDF pages (deep link #/read/34)",
+      "ok": true,
+      "ms": 4902,
+      "detail": {
+        "pages": 6,
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/"
+        ]
+      }
+    },
+    {
+      "name": "Download PDF saves original bytes",
+      "ok": true,
+      "ms": 2834,
+      "detail": {
+        "filename": "imd-daily-34.pdf",
+        "size": 3110643,
+        "head": "%PDF-"
+      }
+    },
+    {
+      "name": "wallet connect sheet",
+      "ok": true,
+      "ms": 1704,
+      "detail": {
+        "rows": [
+          "Test Wallet",
+          "Coinbase Wallet"
+        ],
+        "focusAfterEscape": "Connect wallet",
+        "label": "0x48E4…6ec9 · Disconnect",
+        "calls": [
+          "eth_accounts",
+          "wallet_requestPermissions",
+          "eth_requestAccounts",
+          "eth_chainId"
+        ],
+        "mintPanel": "Support the independent press Collect this edition 24-hour open edition 0.1 IMD per copy Collecting has ended Closed Closes November 25, 2026, 06:12 UTC This edition stays free to read and download. 3 copies minted · Uncapped edition A collectible to support the paper. No copyright or promise of ret",
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()"
+        ]
+      }
+    },
+    {
+      "name": "simulated https://daily.imd.fun: deep link, fonts, images, PDF, canonical",
+      "ok": true,
+      "ms": 11337,
+      "detail": {
+        "images": 4,
+        "fonts": [
+          "Source Serif 4 600",
+          "UnifrakturCook 700",
+          "IBM Plex Sans 400 600"
+        ],
+        "canonical": "https://daily.imd.fun/",
+        "vpsHealthFromNewOrigin": "blocked: Failed to fetch",
+        "summariesFromNewOrigin": "HTTP 200",
+        "errors": [
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Failed to load resource: the server responded with a status of 403 ()",
+          "Failed to load resource: the server responded with a status of 400 ()",
+          "Access to fetch at 'https://the-imd-daily.duckdns.org/health' from origin 'https://daily.imd.fun' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested r",
+          "Failed to load resource: net::ERR_FAILED"
+        ],
+        "failed": [
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "https://the-imd-daily.duckdns.org/api/summaries net::ERR_ABORTED",
+          "https://the-imd-daily.duckdns.org/files/4e9feb39edbe63db01870bdbb0be7783602d17920c27cf25aed4b89675b0ef95.png net::ERR_ABORTED",
+          "https://ethereum-rpc.publicnode.com/ net::ERR_ABORTED",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "403 https://ethereum-rpc.publicnode.com/",
+          "400 https://eth.drpc.org/",
+          "https://the-imd-daily.duckdns.org/health net::ERR_FAILED"
+        ]
+      }
+    },
+    {
+      "name": "legacy origin: VPS publisher endpoints still allowed",
+      "ok": true,
+      "ms": 1371,
+      "detail": {
+        "health": "HTTP 200 {\"ok\":true,\"version\":\"1.0.0\",\"publicFileOrigin\":\"https://the-imd-daily.duckdns.org\"}"
+      }
+    },
+    {
+      "name": "legacy redirect when new host is live",
+      "ok": true,
+      "ms": 11162,
+      "detail": {
+        "landed": "https://daily.imd.fun/?ref=test#/read/34",
+        "publisherStays": "https://the-imd-daily-free-to-read-colle.sites.imd.fun/#/publisher"
+      }
+    },
+    {
+      "name": "no redirect while the new host is unreachable",
+      "ok": true,
+      "ms": 8439,
+      "detail": {
+        "url": "https://the-imd-daily-free-to-read-colle.sites.imd.fun/#/archive"
+      }
+    },
+    {
+      "name": "collection configuration on chain (read-only)",
+      "ok": true,
+      "ms": 738,
+      "detail": {
+        "chainId": 1,
+        "price": "100000000000000000",
+        "window": "86400",
+        "token": "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+        "vault": "0x3343692C3667852a1D4A7D8052c24862e6c523C0",
+        "publisher": "0x48E4E74fE1d0c14404cEB57B9fec5b21329C6ec9",
+        "issueCount": "34",
+        "latestAvailable": false
+      }
     }
-  },
-  {
-    "test": "reader-right-edge",
-    "browser": "webkit",
-    "width": 1440,
-    "edge": 1428,
-    "viewport": 1440
-  },
-  {
-    "test": "fit-navigation",
-    "browser": "webkit",
-    "width": 1440,
-    "pages": [
-      "2",
-      "3",
-      "4"
-    ]
-  },
-  {
-    "test": "vault",
-    "browser": "webkit",
-    "width": 320,
-    "scroll": 320,
-    "client": 320,
-    "table": 288
-  },
-  {
-    "test": "vault",
-    "browser": "webkit",
-    "width": 390,
-    "scroll": 390,
-    "client": 390,
-    "table": 358
-  },
-  {
-    "test": "runtime-errors",
-    "errors": []
-  }
-]
+  ]
+}

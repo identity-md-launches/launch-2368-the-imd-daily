@@ -8,6 +8,9 @@ import "./styles.css";
 import { wagmiConfig } from "./wallet/config";
 import { DataProvider } from "./lib/store";
 import { App } from "./App";
+import { startOriginTransition } from "./lib/origin";
+
+startOriginTransition();
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(

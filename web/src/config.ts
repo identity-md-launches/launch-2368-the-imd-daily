@@ -46,4 +46,15 @@ export const tokenUrl = (id: bigint) => `${EXPLORER}/nft/${DAILY}/${id.toString(
  * the build: the dashboard reads ./service.json (the existing VPS) and lets the publisher store an
  * origin in this browser, so a server move never needs a site rebuild.
  */
+/** Paper Route runs subscriptions on its own website. This site only links to it: no wallet call, no payment. */
+export const SUBSCRIBE_URL = "https://paper-route.imd.site/";
+
+/**
+ * Requested canonical address and the address that serves the site today. daily.imd.fun had no DNS
+ * record when this build was made, so static share metadata stays on the working address and the
+ * legacy host only redirects after the new host has proved it serves this export (see lib/origin.ts).
+ */
+export const CANONICAL_ORIGIN = "https://daily.imd.fun";
+export const LEGACY_ORIGIN = "https://the-imd-daily-free-to-read-colle.sites.imd.fun";
+
 export const SERVICE_STORAGE_KEY = "imd-daily:service-origin";

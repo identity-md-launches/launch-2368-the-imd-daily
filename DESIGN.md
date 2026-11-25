@@ -22,7 +22,7 @@ The application uses one dark theme, with role-based hex tokens in `styles.css:4
 | `--color-control-border` | `#52747A` | Distinguishable form/control boundaries |
 | `--color-accent` / `--color-accent-hover` | `#8FE85D` / `#A9F27F` | Collecting action and open status |
 | `--color-accent-ink` | `#0B1B0C` | Text on the green action |
-| `--color-cyan` / `--color-focus` | `#47CDD5` | Reading action, links, press label and focus |
+| `--color-cyan` / `--color-focus` | `#47CDD5` | Reading action, links, the Subscribe nav item and subscription button border, focus |
 | `--color-ok` / `--color-err` | `#8FE85D` / `#FFABA3` | Written success/error states |
 
 Browser-computed contrast pairs were measured: primary text/page 17.18:1; secondary text/page 9.56:1; cyan/page 10.21:1; primary text/panel 16.10:1; secondary text/panel 8.96:1; green-action text/fill 11.79:1. Decorative image contrast is not used to establish text contrast. Cream appears in original newspaper artwork, not as a page-wide background.
@@ -35,27 +35,27 @@ Three locally bundled families have distinct roles:
 - **Source Serif 4 400/600**, with Georgia/Times New Roman/serif fallback, supplies confident editorial headings and edition copy. The unchanged Fontsource dependency emits its WOFF2 and WOFF files.
 - **IBM Plex Sans variable 400–600**, with Arial/sans-serif fallback, supplies UI, prose, form labels, prices and timers. Rendered UI uses 400 and 600. Its local WOFF2 and the blackletter font are in `web/public/fonts/`.
 
-Font licenses ship in `web/public/fonts/licenses/`. All families use `font-display: swap`. Six semantic sizes are defined: 14px small, 16px body, 20px subheading, 28px section, 36px brand/price, and 48px lead. The brand becomes 28px below 760px and 20px below 360px. The lead becomes 36px at 1100–1280px and 28px in the tablet intro. Body line-height is 1.55; lead headings use 1.13 and section headings 1.2. Display tracking ranges from −0.02em to −0.035em. The explicitly requested cyan uppercase press label uses +0.035em.
+Font licenses ship in `web/public/fonts/licenses/`. All families use `font-display: swap`. Six semantic sizes are defined: 14px small, 16px body, 20px subheading, 28px section, 36px brand/price, and 48px lead. The brand becomes 28px below 760px and 20px below 360px. The lead becomes 36px at 1100–1280px and 28px in the tablet intro. Body line-height is 1.55; lead headings use 1.13 and section headings 1.2. Display tracking ranges from −0.02em to −0.035em. No uppercase or tracked labels are used; the former uppercase press label above the lead heading was removed in this revision (the footer still names the paper an independent community press).
 
 Changing amounts and timestamps use `.num` with tabular lining digits. Headings balance where appropriate; prose wraps naturally and longer copy is limited to roughly 65–75 characters. Hashes and contract URLs wrap anywhere.
 
 ## Layout
 
-The desktop frame has 32px outer gutters and a 1560px maximum content width. The masthead is at least 84px high, with emblem/wordmark at the leading edge, four central links, and a wallet control at the trailing edge. Vault and Publisher desk are in the footer.
+The desktop frame has 32px outer gutters and a 1560px maximum content width. The masthead is at least 84px high, with emblem/wordmark at the leading edge, five central links (Today, Archive, My Collection, About, and an external cyan **Subscribe ↗**), and a wallet control at the trailing edge. Subscribe via Paper Route, About, Vault and Publisher desk are in the footer.
 
 The homepage lead uses 30/43/27 fractional columns after 28px gaps: editorial introduction and reporter, the real cover and reading/download actions, then one collector panel. The cover is at most 430px wide, keeps its source aspect ratio/colors, and has subtle stacked-paper edges. The introduction and every paragraph sit on quiet opaque surfaces. City scenery is a separate decorative layer.
 
-A thin metadata strip shows the actual issue number, editorial date, reading access and window status. The archive lists real covers/dates, including the current issue when it is the only published edition. A saved editorial summary appears only when the service supplies one for the committed PDF hash.
+A thin metadata strip shows the actual issue number, editorial date, reading access and window status. Directly below it, in normal page flow, the subscription section (`#subscribe`) pairs the heading, Paper Route copy and **Subscribe via Paper Route** button (left, `minmax(0,1fr)`) with a three-part definition list (right, `minmax(0,1.3fr)`) that separates **Read free**, **Collect one edition** and **Subscribe**. It is separated from the archive by one teal rule; there is no popup, banner or sticky element. The archive lists real covers/dates, including the current issue when it is the only published edition. A saved editorial summary appears only when the service supplies one for the committed PDF hash.
 
 Spacing uses 4/8/12/16/24/40px tokens, supplemented by 20/22/28/32/48px for the final editorial grid and panel insets.
 
 - **1100–1280px:** tighter gaps, a smaller lead and collector stamp.
-- **Below 1100px:** two lead columns; a compact introduction spans above them; navigation occupies its own header row.
-- **Below 760px:** 16px gutters; scenery and introductory decoration are removed. The real cover and Read action come first, collecting second, then metadata/archive/summary. The cover is at most 294px wide. The archive becomes a touch-scrollable shelf with scroll snapping.
-- **Below 360px:** the header hides the decorative emblem and uses a 20px brand; the cover is 250px wide.
+- **Below 1100px:** two lead columns; a compact introduction spans above them; navigation occupies its own header row; the subscription section stacks its copy above the three-way comparison.
+- **Below 760px:** 16px gutters; scenery and introductory decoration are removed. The real cover and Read action come first, collecting second, then metadata/archive/summary. The cover is at most 294px wide. The archive becomes a touch-scrollable shelf with scroll snapping. The nav keeps all five items in one row and shortens “My Collection” to “Collection” (`.nav-my` hidden); the subscription button becomes full width and the comparison list stacks with thin top rules.
+- **Below 360px:** the header hides the decorative emblem and uses a 20px brand; the nav wraps and centers onto two rows (Subscribe on the second); the cover is 250px wide.
 - Existing issue/about/vault layouts collapse into one column below 760px. Hashes, publisher addresses and accounting tables wrap rather than clip.
 
-Reflow was checked at 320, 390, 759, 900, 1100 and 1440px in Chromium and WebKit. At 390px the original cover and Read action fit on the first 844px screen. These are emulated viewport checks, not physical-device tests.
+This revision re-checked 320, 390 and 1440px in headless Chromium (no horizontal overflow; at 390px the cover, Read action and Subscribe nav item fit the first 844px screen). Earlier revisions also checked 759, 900 and 1100px and WebKit; those widths and WebKit were not re-run for this change. These are emulated viewport checks, not physical-device tests.
 
 ## Elevation & Depth
 
@@ -72,6 +72,9 @@ Controls use 3px radii and 1px control borders. Panels remain rectangular. Only 
 | Component/pattern | Source | Behavior |
 | --- | --- | --- |
 | Shared header and footer | `web/src/App.tsx` | Hash navigation, active section, home link, skip link, footer utilities |
+| `SubscribeLink` | `web/src/components/SubscribeLink.tsx` | The only way the site links to subscriptions: exactly `https://paper-route.imd.site/`, `target="_blank"`, `rel="noopener noreferrer"`, visually hidden “(opens Paper Route in a new tab)”; no wallet or payment code |
+| `SubscribeSection` | `web/src/components/SubscribeSection.tsx` | Homepage subscription note with the requested copy, `.btn-subscribe` (transparent, cyan border) and the Read free / Collect one edition / Subscribe `dl.ways` comparison |
+| Origin transition | `web/src/lib/origin.ts` | Sets the runtime canonical link; on the legacy host, redirects to `https://daily.imd.fun` with path/query/hash only after the new host serves this favicon; never for `#/publisher` or `?stay` |
 | `Artwork` | `web/src/components/Artwork.tsx` | Local WebP with transparent PNG fallback; decorative by default; intrinsic sizes prevent distortion |
 | Current edition/metadata/archive | `web/src/pages/FrontPage.tsx` | Real chain content, clickable cover, responsive shelf, search on archive route, truthful empty/loading/error states |
 | `MintPanel` | `web/src/components/MintPanel.tsx` | Chain-derived price/window/supply, minus/input/plus, exact integer totals, optional recipient, balance/gas details, exact approval then mint, pending/error/receipt states |
@@ -87,7 +90,7 @@ Focus uses a 2px cyan outline offset by 4px, with a system Highlight outline und
 
 ## Do's and Don'ts
 
-Use the existing hash routes, opaque dark tokens, serif hierarchy, native controls and `DownloadLink` when extending a page. Choose cyan for reading/navigation and lime for collecting. Keep contract data live and document test fixtures as fixtures.
+Use the existing hash routes, opaque dark tokens, serif hierarchy, native controls and `DownloadLink` when extending a page. Choose cyan for reading/navigation/subscribing and lime for collecting. Route every subscription link through `SubscribeLink`; never add prices, renewal terms or wallet calls for subscriptions. Keep contract data live and document test fixtures as fixtures.
 
 To add a route, use the existing App route switch, a semantic section heading and the `page-narrow` or `columns` layout, then reuse existing fields/buttons and error/status patterns. Keep critical addresses and hashes fully available.
 

@@ -8,6 +8,7 @@ import { About } from "./pages/About";
 import { Collection } from "./pages/Collection";
 import { VaultPage } from "./pages/VaultPage";
 import { Publisher } from "./pages/Publisher";
+import { SubscribeLink } from "./components/SubscribeLink";
 
 /** Hash routes: the export is static, so no server has to rewrite paths. */
 function useRoute() {
@@ -23,7 +24,7 @@ function useRoute() {
 const NAV = [
   { href: "#/", label: "Today", key: "" },
   { href: "#/archive", label: "Archive", key: "archive" },
-  { href: "#/collection", label: "My Collection", key: "collection" },
+  { href: "#/collection", label: <><span className="nav-my">{"My "}</span>Collection</>, key: "collection" },
   { href: "#/about", label: "About", key: "about" },
 ];
 
@@ -51,6 +52,7 @@ export function App() {
             {NAV.map((n) => (
               <a key={n.key} href={n.href} aria-current={head === n.key || (n.key === "" && head === "issue") ? "page" : undefined}>{n.label}</a>
             ))}
+            <SubscribeLink className="nav-subscribe">Subscribe <span aria-hidden="true">↗</span></SubscribeLink>
           </nav>
           <div className="header-wallet"><ConnectSheet /></div>
         </header>
@@ -68,7 +70,7 @@ export function App() {
         </main>
         <footer className="foot">
           <div><span className="footer-brand">The IMD Daily</span><span>Independent community press · Ethereum</span></div>
-          <nav aria-label="More"><a href="#/about">About the paper</a><a href="#/vault">Vault</a><a href="#/publisher">Publisher desk</a></nav>
+          <nav aria-label="More"><SubscribeLink>Subscribe via Paper Route <span aria-hidden="true">↗</span></SubscribeLink><a href="#/about">About the paper</a><a href="#/vault">Vault</a><a href="#/publisher">Publisher desk</a></nav>
         </footer>
       </div>
     </div>

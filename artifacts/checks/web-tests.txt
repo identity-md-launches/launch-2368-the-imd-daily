@@ -1,15 +1,19 @@
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "cache-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 
 > the-imd-daily-web@1.0.0 test
 > vitest run --configLoader native
 
 
- RUN  v3.2.7 /tmp/imd-daily-build/web
+ RUN  v3.2.7 /tmp/claude-1008/build/web
 
- ✓ test/service.test.ts (4 tests) 13ms
- ✓ test/logic.test.ts (12 tests) 14ms
+ ✓ test/logic.test.ts (12 tests) 15ms
+ ✓ test/service.test.ts (4 tests) 15ms
+ ✓ test/origin.test.ts (4 tests) 6ms
 
- Test Files  2 passed (2)
-      Tests  16 passed (16)
-   Start at  12:44:08
-   Duration  638ms (transform 189ms, setup 0ms, collect 467ms, tests 27ms, environment 0ms, prepare 151ms)
+ Test Files  3 passed (3)
+      Tests  20 passed (20)
+   Start at  06:20:48
+   Duration  1.63s (transform 225ms, setup 0ms, collect 603ms, tests 36ms, environment 1ms, prepare 324ms)
 
+test exit 0

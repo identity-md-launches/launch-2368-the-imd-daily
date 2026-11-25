@@ -8,6 +8,7 @@ import { MintPanel } from "../components/MintPanel";
 import { Stale } from "../components/Stale";
 import { Artwork } from "../components/Artwork";
 import { DownloadLink } from "../components/DownloadLink";
+import { SubscribeSection } from "../components/SubscribeSection";
 
 const dateText = (i: Issue) => `${editorialDate(i.editorialDate, true)} ${isoDate(i.editorialDate)}`;
 
@@ -32,6 +33,7 @@ export function FrontPage({ archiveOnly = false }: { archiveOnly?: boolean }) {
   return <>
     <Stale />
     {!archiveOnly && (latest ? <Lead issue={latest} /> : <EmptyFront />)}
+    {!archiveOnly && <SubscribeSection />}
     {issues.length > 0 && <div className={`below-lead${archiveOnly ? " archive-full" : ""}`}>
       <section className="archive" aria-labelledby="archive-h">
         <div className="archive-head">
@@ -59,8 +61,7 @@ export function FrontPage({ archiveOnly = false }: { archiveOnly?: boolean }) {
 
 function EmptyFront() {
   return <section className="empty-newsroom" aria-labelledby="empty-h">
-    <div><p className="press-label">Independent community press</p>
-      <h2 id="empty-h" className="h-lead">The first edition is still on the press.</h2>
+    <div><h2 id="empty-h" className="h-lead">The first edition is still on the press.</h2>
       <p>No issue has been published on chain yet. Its real front page will appear here when it is ready.</p>
       <a className="btn" href="#/about">About the paper</a></div>
     <Artwork name="reporter" eager />
@@ -73,7 +74,7 @@ function Lead({ issue }: { issue: Issue }) {
   return <>
     <section className="newsroom-lead" aria-label="Latest edition">
       <div className="newsroom-intro">
-        <div className="intro-copy"><p className="press-label">Independent community press</p>
+        <div className="intro-copy">
           <h2 className="intro-title">The world of IMD.<br /><span>One edition<br className="intro-break" /> at a time.</span></h2>
           <p className="intro-deck">Free to read. Yours to collect.</p></div>
         <Artwork name="reporter" className="reporter-art" eager />

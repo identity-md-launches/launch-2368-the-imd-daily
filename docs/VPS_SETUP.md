@@ -22,7 +22,7 @@ The server holds no private key and needs no secret.
 5. `cd ~/imd-daily && cp env.example .env`, then set:
    - `FILES_DOMAIN=yourname-imd-daily.duckdns.org`
    - `PUBLIC_FILE_ORIGIN=https://yourname-imd-daily.duckdns.org`
-   - `ALLOWED_ORIGINS=` the exact origin of the IMD site URL (for example `https://the-imd-daily.<imd host>`), comma-separated if more than one.
+   - `ALLOWED_ORIGINS=` the exact origin of the IMD site URL, comma-separated if more than one, never `*`. For the move to the canonical address list `https://daily.imd.fun` together with the working `https://the-imd-daily-free-to-read-colle.sites.imd.fun` (see [DOMAIN-MIGRATION.md](DOMAIN-MIGRATION.md)).
 6. Validate the HTTPS proxy before starting it:
    `docker compose run --rm --no-deps --entrypoint caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile`.
    Then run `docker compose up -d --build`. Caddy obtains a Let's Encrypt certificate for `FILES_DOMAIN` automatically. The proxy leaves file bytes and byte-range responses unencoded.

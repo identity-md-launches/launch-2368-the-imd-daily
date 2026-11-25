@@ -1,4 +1,7 @@
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "cache-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 
 > the-imd-daily-web@1.0.0 typecheck
 > tsc --noEmit
 
+typecheck exit 0
